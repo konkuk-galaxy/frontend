@@ -11,11 +11,16 @@ body {
 #ending {
   text-align: center;
   position: relative;
+  color: white;
+  height: 100vh;
+  background: url('stars-g5d44ea9a5_1920.jpg') no-repeat center;
+  background-size: cover;  
 }
 
 #winorlose {
   margin-top: 30px;
   margin-bottom: 400px;
+  color: #fff700;
   font-size: 120px;
 }
 
