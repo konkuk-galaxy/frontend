@@ -5,22 +5,25 @@
 
 body {
   margin: auto;
-
 }
 
 #ending {
   text-align: center;
+  position: relative;
 }
 
 #winorlose {
   margin-top: 30px;
-  margin-bottom: 200px;
+  margin-bottom: 400px;
   font-size: 120px;
 }
 
 #showscore {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-size: 50px;
-  margin-bottom: 200px;
 }
 
 #ending button {
