@@ -6,5 +6,6 @@ const showGameResult = (score, win) => {
 }
 
 const endGame = () => {
-  window.close();
+  const customWindow = window.open('', '_blank', '');
+  customWindow.close();
 }
