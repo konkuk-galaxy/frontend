@@ -4,8 +4,97 @@
   <meta charset="UTF-8">
   <title>갤럭시 메인화면</title>
   <link rel="stylesheet" href="galaxy.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="start.js"></script>
 </head>
 <body>
+
+  <audio id="bgm1" class="allBgm" loop>
+    <source src="bgm/Alternate.m4a">
+  </audio>
+  <audio id="bgm2" class="allBgm" loop>
+    <source src="bgm/Bike_Rides.m4a">
+  </audio>
+
+
+  <div id="beforeStart">
+    아무 화면이나 클릭하시오. <br>
+    (오토플레이 적용 안되서 추가)
+  </div>
+
+  <div id="main-title">
+    <h1>GALAXY</h1>
+  </div>
+
+  <div id="setting-img">
+    <img src="etc/setting_img.jpg">
+  </div>
+    
+
+  <div id="setting-popup">
+    <div class="close-img">
+      <img src="etc/close_img.jpg">
+    </div>
+    <div id="setting-menu">
+      <div id="setting-backgroundImg" class="setting">
+        <h3>배경 이미지를 변경</h3>
+        <div id="backgroundImgTable"></div>
+      </div>
+      <div id="setting-ballColor" class="setting">
+        <h3>블록 색깔 변경</h3>
+        <canvas id="blockColorShow" class="colorShowCanvas" width="100" height="100"></canvas>
+        <div id="blockColorTable"></div>
+      </div>
+      <div id="setting-blockColor" class="setting">
+        <h3>공 색깔 변경</h3>
+        <canvas id="ballColorShow" class="colorShowCanvas" width="100" height="100"></canvas>
+        <div id="ballColorTable"></div>
+      </div>
+      <div id="setting-backgroundSound" class="setting">
+        <h3>배경 음악을 변경</h3>
+        <select id="select-bgm">
+          <option value="bgm1" selected>Bgm1</option>
+          <option value="bgm2">Bgm2</option>
+          <option value="none">none</option>
+        </select>
+      </div>
+      <div id="setting-volum" class="setting">
+        <h3>사운드 음량 조절</h3>
+        <img src="etc/speaker_on.jpg" id="speakerImg">
+        <input type="range" min="0" max="10" value="5" id="volume-bar">
+        <div id="vol_val">
+          0.5
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+  <div id="level-select" class="main-menu">
+    level select
+  </div>
+
+
+  <div id="level-popup">
+    <div class="close-img">
+      <img src="etc/close_img.jpg">
+    </div>
+    <div id="easy" class="level">
+      <a href="level1.html" target="_self">easy</a>
+    </div>
+    <div id="normal" class="level">
+      <a href="level2.html" target="_self">normal</a>
+    </div>
+    <div id="hard" class="level">
+      <a href="level3.html" target="_self">hard</a>
+    </div>
+  </div>
+
+  <div id="game-exit" class="main-menu">
+    game exit(edge 적용 안됨)
+  </div>
   
+    
 </body>
 </html>
