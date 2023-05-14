@@ -101,7 +101,7 @@ $(function(){
         }
     });
 
-    //exit을 클릭하면 창을 닫음(Microsoft edge에선 동작하지 않음, chrome에선 동작)
+    //exit을 클릭하면 창을 닫음
     $("#game-exit").on("click", function() {
         window.close();
         //window.open('','_self').close();
