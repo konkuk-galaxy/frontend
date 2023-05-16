@@ -120,6 +120,7 @@ body {
 
 .close-img {
   float: right;
+  cursor: pointer;
 }
 .popup {
   margin: auto;
