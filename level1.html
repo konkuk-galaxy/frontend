@@ -4,8 +4,174 @@
   <meta charset="UTF-8">
   <title>갤럭시 레벨1</title>
   <link rel="stylesheet" href="galaxy.css">
+  <style> canvas { background: #eee; display: block; margin: 0 auto;} </style>
 </head>
 <body>
-  
+  <canvas id="myCanvas" width="500" height="500"></canvas>
+  <script>
+const canvas = document.getElementById("myCanvas");
+const ctx = canvas.getContext("2d");
+const x = canvas.width/2;
+const y = canvas.height-30;
+const brickRowCount = 5;
+const brickColumnCount = 5;
+const brickWidth = 75;
+const brickHeight = 20;
+const brickPadding = 10;
+const brickOffsetTop = 30;
+const brickOffsetLeft = 30;
+const breakBrick = 0;
+const itemType = 0;
+const itemUse = 0;
+const itemPosX = 0;
+const itemPosY = 0;
+const equipItem = 0;
+
+const imgBricks = new Image();
+imgBricks.onload = draw;
+imgBricks.src = "img/bricks.jpg"
+
+
+const bricks = [];
+function makeBricks(){
+    for(let c=0; c<brickColumnCount; c++) {
+        bricks[c] = [];
+        for(let r=0; r<brickRowCount; r++) {
+            bricks[c][r] = { x: 0, y: 0, status: 1, itemBrick: 1};
+        }
+    }
+} // 변수에 지정해둔 벽돌의 행렬 값을 통해 벽돌 행렬을 구현
+
+
+function drawBricks() {
+  for(let c=0; c<brickColumnCount; c++) {
+    for(let r=0; r<brickRowCount; r++) {
+        let brickX;
+        let brickY;
+        if(bricks[c][r].status == 1) {
+        brickX = (r*(brickWidth+brickPadding))+brickOffsetLeft;    
+        brickY = (c*(brickHeight+brickPadding))+brickOffsetTop;
+        bricks[c][r].x = brickX;
+        bricks[c][r].y = brickY;
+        ctx.beginPath();
+        /* ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                 ctx.fillStyle = "#0095DD";
+                 ctx.fill();*/
+        ctx.drawImage(imgBricks, brickX, brickY - 12, 63, 24);
+        ctx.closePath();
+      }
+    }
+  }
+}  // 벽돌 배치
+
+function arrangeItem() {
+    if(breakBrick > 0 && itemUse < 1){
+        if(getRandomInt(1, 1000) < 250){
+            randomValue = getRandomInt(1, 1000);
+           itemType=(randomValue - 1)/100 +1;
+        }
+        breakBrick = 0;
+    }
+} // 아이템 랜덤 배분 itemType 1~10까지, 깨질때마다 랜덤하게 배분 
+
+function itemEffect() {
+    if(itemPosX === 0 && itemPosY === 0){
+        itemPosX = x;
+        itemPosY = y;
+    }
+    itemPosY += 1;
+    if(itemType === 1){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 1번 아이템 효과         
+        itemType = 0;
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 2){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 2번 아이템 효과  
+        itemType = 0;       
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 3){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 3번 아이템 효과   
+        itemType = 0;      
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 4){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 4번 아이템 효과     
+        itemType = 0;    
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 5){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 5번 아이템 효과     
+        itemType = 0;    
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 6){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 6번 아이템 효과     
+        itemType = 0;    
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 7){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 7번 아이템 효과       
+        itemType = 0;  
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 8){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 8번 아이템 효과    
+        itemType = 0;     
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 9){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 9번 아이템 효과      
+        itemType = 0;   
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 10){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 10번 아이템 효과         
+        itemType = 0;
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    
+    if(itemPosY > canvas.height){
+        itemPosX = 0;
+        itemPosY = 0;
+        itemType = 0;
+    }
+    if(itemUse < 0)
+        equipItem = 0;
+    if(equipItem < 1)
+        itemUse = 0;
+}
+
+function draw() {
+  makeBricks();
+  drawBricks();
+  arrangeItem();
+  if(itemType > 0){
+    itemEffect();
+  }
+  }
+
+draw();
+  </script>
 </body>
 </html>
