@@ -1,8 +1,8 @@
-let backgroundUrl = ["url('background/space-g52a222904_1920.jpg')",
+const backgroundUrl = ["url('background/space-g52a222904_1920.jpg')",
  "url('background/space-g10131bb9e_1920.jpg')",
  "url('background/stars-g5d44ea9a5_1920.jpg')"];
 
-let Color = [
+const color = [
     "red", "orange", "yellow", "lime", "green", "blue", "aqua", "purple", "black", 
     "gray", "aliceblue", "blueviolet", "brown", "navy"
 ];
