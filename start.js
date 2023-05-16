@@ -7,8 +7,8 @@ const color = [
     "gray", "aliceblue", "blueviolet", "brown", "navy"
 ];
 
-let ballColor = Color[10];  //공 색상 정보 저장
-let blockColor = Color[10];  //블럭 색상 정보 저장
+let ballColor = color[10];  //공 색상 정보 저장
+let blockColor = color[10];  //블럭 색상 정보 저장
 let background_IMg = backgroundUrl[0];  //배경 이미지 정보 저장
 
 let blockContext;  //설정에서의 블럭 예시창
@@ -153,11 +153,11 @@ function createBackgroundTable()
 function createColorTable(obj, className)
 {
     let i;
-	for(i = 0; i < Color.length; i++)
+	for(i = 0; i < color.length; i++)
 	{
         let new_div = $("<div>");
         new_div.addClass(className);
-        new_div.css("background-color",Color[i]);
+        new_div.css("background-color",color[i]);
         new_div.css({"display":"inline-block","width":"64px","height":"48px"});
         $(obj).append(new_div);
 	}
@@ -170,11 +170,11 @@ function ballColorShowCanvas()
 	drawBall(ballColor);
 }
 
-function drawBall(color) {
+function drawBall(color_info) {
 	ballContext.clearRect(0,0,100,100);
 	ballContext.beginPath();
 	ballContext.arc(50,50,10,0,2.0*Math.PI, true);
-	ballContext.fillStyle = color;
+	ballContext.fillStyle = color_info;
 	ballContext.fill();
 }
 
