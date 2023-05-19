@@ -1,0 +1,43 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+body {
+  margin: auto;
+  background: url('stars-g5d44ea9a5_1920.jpg') no-repeat center;
+}
+
+#ending {
+  text-align: center;
+  position: relative;
+  color: white;
+  height: 100vh;
+  background-size: cover;  
+}
+
+#winorlose {
+  margin-top: 30px;
+  margin-bottom: 400px;
+  color: #fff700;
+  font-size: 120px;
+}
+
+#showscore {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 50px;
+}
+
+#ending button {
+  display: block;
+  padding: 10px;
+  margin: 20px auto;
+  font-size: 24px;
+  width: 500px;
+  height: 40px;
+  line-height: 20px;
+}
