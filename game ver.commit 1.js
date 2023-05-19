@@ -28,6 +28,10 @@ let brickOffsetLeft = 30;
 
 let life = 3;
 
+const imgBricks = new Image();
+imgBricks.onload = draw;
+imgBricks.src = "img/bricks.jpg"
+
 let bricks = []; //벽돌 생성
 for (let c = 0; c < brickColumnCount; c++) {
     bricks[c] = [];
@@ -64,10 +68,7 @@ function drawBricks() { //벽돌 좌표 지정 + 그리기
                 bricks[c][r].y = brickY;
 
                 ctx.beginPath();
-                ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                //이미지 출력 함수로 변경, X, Y 각 +5 를 하고 가로 세로 -10으로 히트박스와 이미지의 차이를 이용하여 공의 외벽을 맞는것을 구현
-                ctx.fillStyle = "#0095DD";
-                ctx.fill();
+                ctx.drawImage(imgBricks, brickX, brickY - 12, 73, 24);
                 ctx.closePath();
             } } }
 }
@@ -102,6 +103,104 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
                     //아이템 발동 함수
                     //callScore(); //점수 함수
                 } } } } 
+}
+
+function arrangeItem() {
+    if(breakBrick > 0 && itemUse < 1){
+        if(getRandomInt(1, 1000) < 250){
+            randomValue = getRandomInt(1, 1000);
+           itemType=(randomValue - 1)/100 +1;
+        }
+        breakBrick = 0;
+    }
+} // 아이템 랜덤 배분 itemType 1~10까지, 깨질때마다 랜덤하게 배분 
+
+function itemEffect() {
+    if(itemPosX === 0 && itemPosY === 0){
+        itemPosX = x;
+        itemPosY = y;
+    }
+    itemPosY += 1;
+    if(itemType === 1){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 1번 아이템 효과         
+        itemType = 0;
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 2){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 2번 아이템 효과  
+        itemType = 0;       
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 3){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 3번 아이템 효과   
+        itemType = 0;      
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 4){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 4번 아이템 효과     
+        itemType = 0;    
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 5){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 5번 아이템 효과     
+        itemType = 0;    
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 6){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 6번 아이템 효과     
+        itemType = 0;    
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 7){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 7번 아이템 효과       
+        itemType = 0;  
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 8){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 8번 아이템 효과    
+        itemType = 0;     
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 9){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 9번 아이템 효과      
+        itemType = 0;   
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    if(itemType === 10){
+        //ctx.drawImage(image, Imgx,Imgy,Img width,Img height,brickX,brickY,width,height); --> 아이템 이미지
+        // 10번 아이템 효과         
+        itemType = 0;
+        itemUse = 0;
+        itemPosY = 10000;
+    }
+    
+    if(itemPosY > canvas.height){
+        itemPosX = 0;
+        itemPosY = 0;
+        itemType = 0;
+    }
+    if(itemUse < 0)
+        equipItem = 0;
+    if(equipItem < 1)
+        itemUse = 0;
 }
 
 function draw() {
@@ -158,13 +257,10 @@ function keyUpHandler(e) {
     }
 }
 
-/*
+
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-*/
 
-$(document).keydown(keyDownHandler);
-$(document).keyup(keyUpHandler);
 
 function init() {
      //바닥 맞았을 경우 game over 판정 및 위치 초기화 함수
@@ -187,5 +283,3 @@ function setPaddle() { //패들 위치, 크기, 속도 초기화
     paddleWidth = 80;
     paddledx = 7;
 }
-
-draw();
