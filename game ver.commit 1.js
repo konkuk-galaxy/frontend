@@ -10,7 +10,7 @@ let dx = 2;
 let dy = -2;
 
 let paddleHeight = 10; //바 높이, 길이, 생성위치
-let paddleWidth = 80;
+let paddleWidth = 120;
 let paddleX = (canvas.width - paddleWidth) / 2;
 let paddledx = 7;
 
@@ -225,7 +225,32 @@ function move() {
         dy = -dy;
     } else if (y + dy > canvas.height - ballRadius) {
         if (x > paddleX && x < paddleX + paddleWidth) { //공이 바닥이지만, 바에 맞을 경우
+            if(x > paddleX && x < (paddleX + paddleWidth)/7){
+                dx = -dx;
+                dx = dx * 1.15;
+            }
+            if (x > (paddleX + paddleWidth)/7 && x < (paddleX + paddleWidth)*2/7){
+                dx = -dx;
+                dx = dx * 1.1;
+            }
+            if (x > (paddleX + paddleWidth)*2/7 && x < (paddleX + paddleWidth)*3/7){
+                dx = -dx;
+                dx = dx * 1.05;
+            }
+            if (x > (paddleX + paddleWidth)*3/7 && x < (paddleX + paddleWidth)*4/7){
+                dx = dx*0.95;
+            }
+            if (x > (paddleX + paddleWidth)*4/7 && x < (paddleX + paddleWidth)*5/7){
+                dx = dx * 1.05;
+            }
+            if (x > (paddleX + paddleWidth)*5/7 && x < (paddleX + paddleWidth)*6/7){
+                dx = dx * 1.1;
+            }
+            if (x > (paddleX + paddleWidth)*6/7 && x < (paddleX + paddleWidth)){
+                dx = dx * 1.15;
+            }
             dy = -dy;
+            
         } else { // 공이 나갈 경우
             life--;
             init(); 
@@ -280,6 +305,8 @@ function setBall () { //공위치, 속도 초기화
 
 function setPaddle() { //패들 위치, 크기, 속도 초기화
     paddleX = (canvas.width - paddleWidth) / 2;
-    paddleWidth = 80;
+    paddleWidth = 120;
     paddledx = 7;
 }
+
+draw();
