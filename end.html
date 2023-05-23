@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Galaxy Ending</title>
+  <link rel="stylesheet" href="end.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500&display=swap" rel="stylesheet">
+  <script src = "https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <div id="ending">
+    <div id="winorlose">
+      <p>Victory!!</p>
+    </div>
+    <div id="showscore">
+      <p>SCORE: <span id="score"></span></p>
+    </div>
+    <div id="client-move">
+      <button id="move-main" onclick="location.href='main.html'">메인화면</button>
+      <button id="goodbye" onclick="endGame()">종료</button>
+    </div>
+  </div>
+</body>
+<script src="game.js"></script>
+</html>
