@@ -78,7 +78,7 @@ $(function(){
     })
 
     //볼륨바를 조정하면 값에따라 음량을 조절
-    $("#volume-bar").on ("change", function() {
+    $("#volume-bar").on ("input", function() {
         const vol_origin = $(this).val();
         const vol = vol_origin / 10;
 
