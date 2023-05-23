@@ -14,7 +14,7 @@ let background_IMg = backgroundUrl[0];  //배경 이미지 정보 저장
 let blockContext;  //설정에서의 블럭 예시창
 let ballContext;   //설정에서의 공 예시창
 
-let volumTmp = 5;  //볼륨정보 임시 저장
+let volumeTmp = 5;  //볼륨정보 임시 저장
 
 $(function(){
     createBackgroundTable();  //설정에서 배경이미지 테이블 생성
@@ -97,17 +97,16 @@ $(function(){
 
     //스피커 이미지 선택시 볼륨 0으로, 다시 누르면 원래 볼륨으로
     $("#speakerImg").on ("click", function() {
-        if($("#volume-bar").prop("value") == 0)
-        {
-            $("#volume-bar").prop("value", volumTmp);
-            $("#volume-bar").trigger("change");
+        const volumeBar = $("#volume-bar");
+        let currentVolume = volumeBar.val();
+
+        if (currentVolume == 0) {
+            volumeBar.val(volumeTmp).trigger("change");
             return;
         }
 
-        volumTmp = $("#volume-bar").val();
-        
-        $("#volume-bar").prop("value", 0);
-        $("#volume-bar").trigger("change");
+        volumeTmp = currentVolume;
+        volumeBar.val(0).trigger("change");
 	})
 
     //키보드에서 esc를 누르면 세팅팝업을 띄움
