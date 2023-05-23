@@ -14,6 +14,8 @@ let background_IMg = backgroundUrl[0];  //배경 이미지 정보 저장
 let blockContext;  //설정에서의 블럭 예시창
 let ballContext;   //설정에서의 공 예시창
 
+let volumTmp = 5;  //볼륨정보 임시 저장
+
 $(function(){
     createBackgroundTable();  //설정에서 배경이미지 테이블 생성
     createColorTable($("#blockColorTable"), "blockColorList");   //설정에서 블럭 색상 테이블 생성
@@ -77,7 +79,8 @@ $(function(){
 
     //볼륨바를 조정하면 값에따라 음량을 조절
     $("#volume-bar").on ("change", function() {
-        const vol = $(this).val() / 10;
+        const vol_origin = $(this).val();
+        const vol = vol_origin / 10;
 
         if(vol == 0)
         {
@@ -89,9 +92,23 @@ $(function(){
         }
         $("audio").volume = vol;
         $("audio").prop("volume", vol);
-        $("#vol_val").text(vol);
-        
+        $("#vol_val").text(vol_origin);
     })
+
+    //스피커 이미지 선택시 볼륨 0으로, 다시 누르면 원래 볼륨으로
+    $("#speakerImg").on ("click", function() {
+        if($("#volume-bar").prop("value") == 0)
+        {
+            $("#volume-bar").prop("value", volumTmp);
+            $("#volume-bar").trigger("change");
+            return;
+        }
+
+        volumTmp = $("#volume-bar").val();
+        
+        $("#volume-bar").prop("value", 0);
+        $("#volume-bar").trigger("change");
+	})
 
     //키보드에서 esc를 누르면 세팅팝업을 띄움
     document.addEventListener('keydown', (event) => {
@@ -104,7 +121,6 @@ $(function(){
     //exit을 클릭하면 창을 닫음
     $("#game-exit").on("click", function() {
         window.close();
-        //window.open('','_self').close();
     })
 
 })

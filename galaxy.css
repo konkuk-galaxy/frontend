@@ -64,6 +64,7 @@ body {
   background-color: aliceblue;
   background-color: rgba(240, 248, 255, 0.6);
   border-radius: 15px;
+  cursor: pointer;
 }
 #level-popup {
   display: none;
@@ -122,6 +123,9 @@ body {
   float: right;
   cursor: pointer;
 }
+#setting-img {
+  cursor: pointer;
+}
 .popup {
   margin: auto;
   overflow: hidden;
@@ -167,4 +171,12 @@ body {
 #vol_val {
   background-color: white;
   width: 40px;
+}
+#info-setting {
+  padding: 10px;
+  color: rgb(198, 219, 127);
+  font-size: 20px;
+  position: absolute;
+  bottom: 0;
+
 }
