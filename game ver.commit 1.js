@@ -92,6 +92,7 @@ function drawBall() { //공 그리기
     ctx.closePath();
 }
 
+
 function drawPaddle() { //바 그리기
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
@@ -201,12 +202,12 @@ function itemEffect() {
         itemUse = 0;
         itemPosY = 10000;
     }
-    if(itemType === 2){ // 공 속도 변
+    if(itemType === 2){ // 공 속도 변화
         
         dx = dx * 2;
         dy = dy * 2;
         
-        ctx.drawImage(imgItem_ball, itemLogX, itemLogY, 24, 24);
+        ctx.drawImage(imgItem_speed, itemLogX, itemLogY, 24, 24);
         itemCnt++;
         drawItem(); 
         itemType = 0;       
@@ -215,7 +216,7 @@ function itemEffect() {
         
     }
     if(itemType === 3){ // 패들 크기 변화
-        
+       화
         if (paddleitem <3){
             paddleWidth = paddleWidth*1.5;
             paddledx = paddledx*0.66;
@@ -231,10 +232,10 @@ function itemEffect() {
         itemUse = 0;
         itemPosY = 10000;
     }
-    if(itemType === 4){ // 공 크기 u
+    if(itemType === 4){ // 공 느리게
         
-        ballRadius = ballRadius * 1.5;
-
+        dy = dy/2;
+        dx = dx/2;
         ctx.drawImage(imgItem_ball, itemLogX, itemLogY, 24, 24);
         itemCnt++;
         drawItem(); 
