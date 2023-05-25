@@ -115,10 +115,8 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
                     // b.itemEffect();
                     //아이템 발동 함수
                     callScore(0); //점수 함수
-                     if( x >= b.x && /*공이 대각선으로 벽돌과 부딪혔을때 점수 2증가 하는것 방지*/
-                  x <= b.x+brickWidth  && 
-                  (y == b.y || y == b.y+brickHeight)
-                  ){
+                     /* 공이 대각선으로 벽돌과 부딪혔을때 점수 2증가 하는것 방지 */
+                    if (x >= b.x && x <= b.x + brickWidth && (y == b.y || y == b.y + brickHeight)) {
                         score--;
                     }
                 } } } } 
