@@ -4,14 +4,14 @@ let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 
 let ballRadius = 10; //ball 속성, startX이며 공 위치
-let x = canvas.width / 2;
+let x = (canvas.width - 100) / 2;
 let y = canvas.height - 30;
 let dx = 1;
 let dy = -1;
 
 let paddleHeight = 10; //바 높이, 길이, 생성위치
 let paddleWidth = 120;
-let paddleX = (canvas.width - paddleWidth) / 2;
+let paddleX = (canvas.width - 100 - paddleWidth) / 2;
 let paddledx = 7;
 
 let rightPressed = false;
@@ -35,6 +35,9 @@ let itemPosX = 0;
 let itemPosY = 0;
 let jewelType = 0;
 let paddleitem = 0;
+let itemLogX = 501;
+let itemLogY = 20;
+let itemCnt = 0;
 
 let life = 3;
 
@@ -168,58 +171,79 @@ function arrangeItem() {
     }
 } // 아이템 랜덤 배분 itemType 1~10까지, 깨질때마다 랜덤하게 배분 
 
-function itemGone(){
-    return itemPosY = 10000;
-} 
-
+function drawItem(){
+    
+    if(itemLogY <490 && itemLogX === 501){
+        itemLogY = 20;
+        itemLogY += (itemCnt*25);
+    }
+    if(itemLogY > 490){ // 아이템 아이콘 줄바꿈
+        itemLogX = 527;
+        itemLogY = itemLogY + (itemCnt*25) - 475;
+    }
+    if(itemLogY < 490 && itemLogX === 527){ // 아이템 아이콘 둘째줄
+        itemLogY = itemLogY + (itemCnt*25) - 475;
+    }
+}
 function itemEffect() {
     if(itemPosX === 0 && itemPosY === 0){
-        itemPosX = x;
+        itemPosX = x - 20;
         itemPosY = y;
     }
     itemPosY += 5;
-    if(itemType === 1){ // 목숨을 늘려주는 아이템.
-        ctx.drawImage(imgItem_heart, itemPosX, itemPosY, 24, 24);
-        life++;       
+    if(itemType === 1){ // 목숨을 늘려주는 아이템
+        
+        life++;  
+        ctx.drawImage(imgItem_heart, itemLogX, itemLogY, 24, 24);
+        itemCnt++;
+        drawItem(); 
         itemType = 0;
         itemUse = 0;
-        setTimeout(itemGone(),3000);
-        clearTimeout();
+        itemPosY = 10000;
     }
-    if(itemType === 2){ // 공 속도 변화
-        ctx.drawImage(imgItem_ball, itemPosX, itemPosY, 24, 24);
+    if(itemType === 2){ // 공 속도 변
+        
         dx = dx * 2;
         dy = dy * 2;
+        
+        ctx.drawImage(imgItem_ball, itemLogX, itemLogY, 24, 24);
+        itemCnt++;
+        drawItem(); 
         itemType = 0;       
         itemUse = 0;
-        setTimeout(itemGone(),3000);
-        clearTimeout();
+        itemPosY = 10000;
         
     }
     if(itemType === 3){ // 패들 크기 변화
-        ctx.drawImage(imgItem_paddlex2, itemPosX, itemPosY, 24, 24);
+        
         if (paddleitem <3){
             paddleWidth = paddleWidth*1.5;
             paddledx = paddledx*0.66;
+    
+            ctx.drawImage(imgItem_paddlex2, itemLogX, itemLogY, 24, 24);
+            itemCnt++;
+            drawItem(); 
             itemType = 0;      
             itemUse = 0;
-            paddleitem++;
-            setTimeout(itemGone(),3000);
-            clearTimeout();
+            itemPosY = 0;
         }
         itemType = 0;
         itemUse = 0;
         itemPosY = 10000;
     }
-    if(itemType === 4){ // 공 크기 up
-        ctx.drawImage(imgItem_ball, itemPosX, itemPosY, 24, 24);
+    if(itemType === 4){ // 공 크기 u
+        
         ballRadius = ballRadius * 1.5;
+
+        ctx.drawImage(imgItem_ball, itemLogX, itemLogY, 24, 24);
+        itemCnt++;
+        drawItem(); 
         itemType = 0;    
         itemUse = 0;
-        setTimeout(itemGone(),3000);
-        clearTimeout();
+        itemPosY = 10000;
     }
     if(itemType === 5){ // 유성
+        
         ctx.drawImage(imgItem_meteor, itemPosX, itemPosY, 24, 24);
         if(itemPosX > paddleX && itemPosX < paddleX + paddleWidth && itemPosY > canvas.height - 36 && itemPosY < canvas.height){    
             life--;
@@ -238,30 +262,39 @@ function itemEffect() {
         randomValue2 = getRandomInt(1, 1000);
         jewelType=Math.floor((randomValue2 - 1)/200)+1;
         if(jewelType === 1) { 
-            ctx.drawImage(imgItem_diamond, itemPosX, itemPosY, 24, 24);
-            //score++; 
+            ctx.drawImage(imgItem_diamond, itemLogX, itemLogY, 24, 24);
+            itemCnt++;
+            drawItem(); 
+            
         }
         if(jewelType === 2) { 
-            ctx.drawImage(imgItem_saphire, itemPosX, itemPosY, 24, 24); 
-            //score++; 
+
+            ctx.drawImage(imgItem_saphire, itemLogX, itemLogY, 24, 24); 
+            itemCnt++;
+            drawItem(); 
         }
         if(jewelType === 3) { 
-            ctx.drawImage(imgItem_ruby, itemPosX, itemPosY, 24, 24); 
-            //score++; 
+            ctx.drawImage(imgItem_ruby, itemLogX, itemLogY, 24, 24); 
+            itemCnt++;
+            drawItem(); 
         }
         if(jewelType === 4) { 
-            ctx.drawImage(imgItem_gas, itemPosX, itemPosY, 24, 24); 
-            //score++; 
+            
+            ctx.drawImage(imgItem_gas, itemLogX, itemLogY, 24, 24);  
+            itemCnt++;
+            drawItem(); 
         }
         if(jewelType === 5) { 
-            ctx.drawImage(imgItem_mineral, itemPosX, itemPosY, 24, 24); 
-            //score++; 
+           
+            ctx.drawImage(imgItem_mineral, itemLogX, itemLogY, 24, 24);  
+            itemCnt++;
+            drawItem(); 
         }
+        
+       
         itemType = 0;    
         itemUse = 0;
         jewelType = 0;
-        setTimeout(itemGone(),3000);
-        clearTimeout();
     }
     if(itemType === 8 || itemType === 9 || itemType === 10){ // 꽝
         itemType = 0;     
@@ -277,7 +310,7 @@ function itemEffect() {
 }
 
 function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width - 100, canvas.height);
     drawBricks();
     drawBall();
     drawPaddle(); //추락했을 경우 init setBall 출력
@@ -293,7 +326,7 @@ function draw() {
 }
 
 function move() {
-    if (x + dx > canvas.width - ballRadius || 
+    if (x + dx > canvas.width - 100 - ballRadius || 
         x + dx < ballRadius) { //좌우 벽, 공의 다음x 위치가 반지름보다 작을 경우
         dx = -dx;
     }
@@ -302,29 +335,12 @@ function move() {
         dy = -dy;
     } else if (y + dy > canvas.height - ballRadius) {
         if (x > paddleX && x < paddleX + paddleWidth) { //공이 바닥이지만, 바에 맞을 경우
-            if(x > paddleX && x < (paddleX + paddleWidth)/7){
-                dx = -dx;
-                dx = dx * 1.1;
-            }
-            if (x > (paddleX + paddleWidth)/7 && x < (paddleX + paddleWidth)*2/7){
-                dx = -dx;
-                dx = dx * 1.05;
-            }
-            if (x > (paddleX + paddleWidth)*2/7 && x < (paddleX + paddleWidth)*3/7){
-                dx = -dx;
-                dx = dx * 1.01;
-            }
-            if (x > (paddleX + paddleWidth)*3/7 && x < (paddleX + paddleWidth)*4/7){
-                dx = dx*0.95;
-            }
-            if (x > (paddleX + paddleWidth)*4/7 && x < (paddleX + paddleWidth)*5/7){
-                dx = dx * 1.01;
-            }
-            if (x > (paddleX + paddleWidth)*5/7 && x < (paddleX + paddleWidth)*6/7){
-                dx = dx * 1.05;
-            }
-            if (x > (paddleX + paddleWidth)*6/7 && x < (paddleX + paddleWidth)){
-                dx = dx * 1.1;
+            for (let i = 0; i < 7; i++) {
+                if (x > (paddleX + paddleWidth) * i / 7 && x < (paddleX + paddleWidth) * (i + 1) / 7) {
+                    dx = -dx;
+                    dx = dx + Math.abs((0.05 * (3 - i)));   // 1.15, 1.10, 1.05, 1.00, 1.05, 1.10, 1.15배 x증가폭 변경
+                    break;
+                }
             }
             dy = -dy;
             
@@ -336,7 +352,7 @@ function move() {
     x += dx; //벽, 바닥 충돌 없을경우 일반 이동
     y += dy;
 
-    if (rightPressed && paddleX < canvas.width - paddleWidth) { //paddle 동작
+    if (rightPressed && paddleX < canvas.width - 100 - paddleWidth) { //paddle 동작
         paddleX += paddledx;
     } else if (leftPressed && paddleX > 0) {
         paddleX -= paddledx;
@@ -374,14 +390,15 @@ function init() {
 }
 
 function setBall () { //공위치, 속도 초기화
-    x= canvas.width / 2;
+    x= (canvas.width - 100) / 2;
     y= canvas.height - 30;
     dx=1;
     dy=-1;
+    ballRadius = 10;
 } 
 
 function setPaddle() { //패들 위치, 크기, 속도 초기화
-    paddleX = (canvas.width - paddleWidth) / 2;
+    paddleX = (canvas.width - 100 - paddleWidth) / 2;
     paddleWidth = 120;
     paddledx = 7;
 }
