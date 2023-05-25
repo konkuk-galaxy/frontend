@@ -73,6 +73,21 @@ function drawBricks() { //벽돌 좌표 지정 + 그리기
             } } }
 }
 
+var score=0;
+function callScore(jewel){/*점수함수*/
+    var bonus;
+    if(jewel==1)
+        bonus=2;
+    else if(jewel==2)
+        bonus=4;
+    else if(jewel==3)
+        bonus=9;
+    else if(jewel==0)
+        bonus=1;
+
+    score=score+bonus;
+}
+
 function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히트박스와 이미지상의 차이를 매꾸지 않음
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
@@ -88,7 +103,7 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
                     // b.arrangeItem();
                     // b.itemEffect();
                     //아이템 발동 함수
-                    //callScore(); //점수 함수
+                    callScore(0); //점수 함수
                 }
 
                 if ( //옆면 히트박스 구현 옆면을 맞을때 그 왼쪽에 있는 애들이 싹다 지워짐
@@ -101,7 +116,13 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
                     // b.arrangeItem();
                     // b.itemEffect();
                     //아이템 발동 함수
-                    //callScore(); //점수 함수
+                    callScore(0); //점수 함수
+                     if( x >= b.x && /*공이 대각선으로 벽돌과 부딪혔을때 점수 2증가 하는것 방지*/
+                  x <= b.x+brickWidth  && 
+                  (y == b.y || y == b.y+brickHeight)
+                  ){
+                        score--;
+                    }
                 } } } } 
 }
 
@@ -265,6 +286,7 @@ document.addEventListener("keyup", keyUpHandler, false);
 function init() {
      //바닥 맞았을 경우 game over 판정 및 위치 초기화 함수
     if (life == 0) {
+        localStorage.setItem('score',score);/*점수를 game.js로 전달*/
         location.href = 'end.html';
     }
     setBall();
