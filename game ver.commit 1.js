@@ -73,19 +73,17 @@ function drawBricks() { //벽돌 좌표 지정 + 그리기
             } } }
 }
 
-var score=0;
-function callScore(jewel){/*점수함수*/
-    var bonus;
-    if(jewel==1)
-        bonus=2;
-    else if(jewel==2)
-        bonus=4;
-    else if(jewel==3)
-        bonus=9;
-    else if(jewel==0)
-        bonus=1;
-
-    score=score+bonus;
+/* 점수 함수 */
+let score = 0;
+function callScore(jewel){
+    if(jewel === 0) // 평범한 자원 획득일 경우 1점 획득
+        score += 1;
+    else if(jewel === 1)
+        score += 2;
+    else if(jewel === 2)
+        score += 4;
+    else if(jewel === 3)
+        score += 9;
 }
 
 function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히트박스와 이미지상의 차이를 매꾸지 않음
