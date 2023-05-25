@@ -11,15 +11,5 @@ const endGame = () => {
   customWindow.close();
 }
 
-
-sscore=0;
-
-
-function printscore(j){/*game ver.commit 1.js에서 score를 받아서 print하는 함수*/
-  sscore=localStorage.getItem('score')
-  j.text(sscore);
-}
-
-$(document).ready(function(){/*점수를 print*/
-  printscore($("#score"));
-});
+/* game ver.commit 1.js에서 score를 받아서 print하는 함수*/
+$("#score").text(localStorage.getItem('score'));
