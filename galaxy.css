@@ -141,7 +141,12 @@ body {
   border-radius: 10px;
   
 }
+.color-example {
+  overflow: hidden;
+  margin: 5px;
+}
 .colorShowCanvas {
+  float: left;
   background-color: rgb(240, 248, 255);
   background-color: rgba(240, 248, 255, 0.5);
 }
@@ -175,10 +180,37 @@ body {
   width: 40px;
 }
 #info-setting {
-  padding: 10px;
+  padding: 5px;
   color: rgb(198, 219, 127);
-  font-size: 20px;
+  font-size: 18px;
   position: absolute;
   bottom: 0;
 
+}
+
+#myCanvas {
+  background-color: rgb(240, 248, 255);
+  background-color: rgba(240, 248, 255, 0.5);
+}
+
+#start-info {
+  position: absolute;
+  width: 500px;
+  height: 80px;
+  line-height: 80px;
+  text-align: center;
+  font-size: 30px;
+  color: yellow;
+  top: 230px;
+  left: 180px;
+
+}
+#restart-btn {
+  cursor: pointer;
+  width: 300px;
+  height: 100px;
+  font-size: 25px;
+  border-radius: 15px;
+  background-color: rgb(240, 248, 255);
+  background-color: rgba(122, 171, 214, 0.9);
 }
