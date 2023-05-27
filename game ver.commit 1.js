@@ -77,6 +77,9 @@ imgItem_gas.src = "img/item_gas.jpg"
 const imgItem_meteor = new Image();
 imgItem_meteor.src = "img/item_meteor.jpg"
 
+const imgHealthBar = new Image();
+imgHealthBar.src = "img/health_Bar.jpg"
+
 let bricks = []; //벽돌 생성
 for (let c = 0; c < brickColumnCount; c++) {
     bricks[c] = [];
@@ -195,11 +198,10 @@ function itemEffect() {
     }
     itemPosY += 5;
     if(itemType === 1){ // 목숨을 늘려주는 아이템
-        
-        life++;  
+        life++;
         ctx.drawImage(imgItem_heart, itemLogX, itemLogY, 24, 24);
         itemCnt++;
-        drawItem(); 
+        drawItem();
         itemType = 0;
         itemUse = 0;
         itemPosY = 10000;
@@ -310,6 +312,7 @@ function itemEffect() {
     }
 
 }
+
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width - 100, canvas.height);

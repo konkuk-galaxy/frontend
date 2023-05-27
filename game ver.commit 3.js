@@ -79,6 +79,9 @@ imgItem_gas.src = "img/item_gas.jpg"
 const imgItem_meteor = new Image();
 imgItem_meteor.src = "img/item_meteor.jpg"
 
+const imgHealthBar = new Image();
+imgHealthBar.src = "img/health_Bar.png"
+
 function loadbrick() {
     //html body에 p 태그 #col,row에서 블록 칸수를 때옴
     //무조건 상단 배치 
@@ -219,13 +222,16 @@ function itemEffect() {
     }
     itemPosY += 5;
     if (itemType === 1) { // 목숨을 늘려주는 아이템
-        life++;
-        ctx.drawImage(imgItem_heart, itemLogX, itemLogY, 24, 24);
-        itemCnt++;
-        drawItem();
+        if(life < 4){
+            life++;  
+            ctx.drawImage(imgItem_heart, itemLogX, itemLogY, 24, 24);
+            itemCnt++;
+            drawItem(); 
+        } 
         itemType = 0;
         itemUse = 0;
         itemPosY = 10000;
+        
     }
     if (itemType === 2) { // 공 속도 변화
 
@@ -353,6 +359,21 @@ function nextstage() { //다음 level 이동
     }
 }
 
+function drawHealthBar() {
+    if (life === 1){
+        ctx.drawImage(imgHealthBar, 65, 63, 344, 1278, 570, 392, 24, 88);
+    }
+    if (life === 2){
+        ctx.drawImage(imgHealthBar, 550, 63, 344, 1278, 570, 392, 24, 88);
+    }
+    if (life === 3){
+        ctx.drawImage(imgHealthBar, 1034, 63, 344, 1278, 570, 392, 24, 88);
+    }
+    if (life === 4){
+        ctx.drawImage(imgHealthBar, 1516, 63, 344, 1278, 570, 392, 24, 88);
+    }
+}
+
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width - 100, canvas.height);
@@ -360,6 +381,7 @@ function draw() {
     drawBall();
     drawPaddle(); //추락했을 경우 init setBall 출력
     move();
+    drawHealthBar();
     collisionDetection();
     arrangeItem();
     nextstage();
