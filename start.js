@@ -40,7 +40,7 @@ $(function(){
 		$("#level-popup").show();
 
         $(".mainToStage").each(function() {
-            let url_str = $(this).prop("href");
+            let url_str = $(this).prop("id");
             url_str = url_str + "&ballColor=" + ballColor;
             url_str = url_str + "&blockColor=" + blockColor;
             url_str = url_str + "&background_IMg=" + background_IMg;
