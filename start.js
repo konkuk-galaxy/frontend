@@ -220,3 +220,9 @@ function initAllBgm() {
         all_bgm[i].pause();
     }
 }
+
+
+
+localStorage.setItem('score1',0);/*점수를 초기화*/
+localStorage.setItem('score2',0);
+localStorage.setItem('score3',0);
