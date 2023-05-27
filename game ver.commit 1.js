@@ -35,6 +35,8 @@ let itemPosX = 0;
 let itemPosY = 0;
 let jewelType = 0;
 let paddleitem = 0;
+
+// 아이템 로그의 좌표 및 개수 관련 변수 
 let itemLogX = 501;
 let itemLogY = 20;
 let itemCnt = 0;
