@@ -12,4 +12,18 @@ const endGame = () => {
 }
 
 /* game ver.commit 1.js에서 score를 받아서 print하는 함수*/
-$("#score").text(localStorage.getItem('score'));
+
+let score1=0;
+let score2=0;
+let score3=0;
+if(localStorage.getItem('score1')!=null){
+  score1=localStorage.getItem('score1');
+}
+if(localStorage.getItem('score2')!=null){
+  score2=localStorage.getItem('score2');
+}
+if(localStorage.getItem('score3')!=null){
+  score3=localStorage.getItem('score3');
+}
+let total=parseInt(score1)+parseInt(score2)+parseInt(score3);
+$("#score").text(total);
