@@ -42,20 +42,24 @@
       </div>
       <div id="setting-ballColor" class="setting">
         <h3>블록 색깔 변경</h3>
-        <canvas id="blockColorShow" class="colorShowCanvas" width="100" height="100"></canvas>
+        <div class="color-example">
+         <canvas id="blockColorShow" class="colorShowCanvas" width="100" height="100"></canvas>
+        </div>
         <div id="blockColorTable"></div>
       </div>
       <div id="setting-blockColor" class="setting">
         <h3>공 색깔 변경</h3>
-        <canvas id="ballColorShow" class="colorShowCanvas" width="100" height="100"></canvas>
+        <div class="color-example">
+          <canvas id="ballColorShow" class="colorShowCanvas" width="100" height="100"></canvas>
+        </div>
         <div id="ballColorTable"></div>
       </div>
       <div id="setting-backgroundSound" class="setting">
         <h3>배경 음악을 변경</h3>
         <select id="select-bgm">
-          <option value="bgm1" selected>Bgm1</option>
-          <option value="bgm2">Bgm2</option>
-          <option value="none">none</option>
+          <option id="bgm1" class="bgm_option" value="bgm1" selected>Bgm1</option>
+          <option id="bgm2" class="bgm_option" value="bgm2">Bgm2</option>
+          <option id="none" class="bgm_option" value="none">none</option>
         </select>
       </div>
       <div id="setting-volum" class="setting">
@@ -81,13 +85,13 @@
       <img src="etc/close_img.jpg">
     </div>
     <div id="easy" class="level">
-      <a href="level1.html" target="_self">easy</a>
+      <a class="mainToStage" id="level1.html?level_info=1" href="" target="_self">easy</a>
     </div>
     <div id="normal" class="level">
-      <a href="level2.html" target="_self">normal</a>
+      <a class="mainToStage" id="level2.html?level_info=2" href="" target="_self">normal</a>
     </div>
     <div id="hard" class="level">
-      <a href="level3.html" target="_self">hard</a>
+      <a class="mainToStage" id="level3.html?level_info=3" href="" target="_self">hard</a>
     </div>
   </div>
 

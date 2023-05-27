@@ -10,8 +10,8 @@ let ctx = canvas.getContext("2d");
 let ballRadius = 10; //ball 속성, startX이며 공 위치
 let x = (canvas.width - 100) / 2;
 let y = canvas.height - 30;
-let dx = 1;
-let dy = -1;
+let dx = 1 * 2;
+let dy = -1 * 2;
 
 let paddleHeight = 10; //바 높이, 길이, 생성위치
 let paddleWidth = 120;
@@ -45,8 +45,12 @@ let itemCnt = 0;
 
 let life = 3;
 
+let gameMove; //requestAnimationFrame을 이 변수로 받아서 설정창이 열리면 애니매이션을 멈춤
+
+let gameOn_Off = false; //게임이 실행되면 true로 바뀜, 게임 시작 전 설정을 키고 닫으면 공이 움직이는 문제때문에 만듬
+
 const imgBricks = new Image();
-imgBricks.onload = draw
+//imgBricks.onload = draw
 imgBricks.src = "img/bricks.jpg"
 
 const imgItem_ball = new Image();
@@ -106,8 +110,7 @@ for (let c = 0; c < brickColumnCount; c++) {
 function drawBall() { //공 그리기
     ctx.beginPath();
     ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#FFBBC6";
-    //색 설정 js 호출
+    ctx.fillStyle = ballColor;
     ctx.fill();
     ctx.closePath();
 }
@@ -116,8 +119,7 @@ function drawBall() { //공 그리기
 function drawPaddle() { //바 그리기
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#648CFF";
-    //색 설정 js 호출
+    ctx.fillStyle = blockColor;
     ctx.fill();
     ctx.closePath();
 }
@@ -330,7 +332,7 @@ function itemEffect() {
 
 function nextstage() { //다음 level 이동
     let flag = 1; //블록이 전부 깨졌을 때 1
-    let URL = window.location.href;
+    //let URL = window.location.href;
     for (let c = 0; c < brickColumnCount; c++) {  //블록이 깨진지 확인
         for (let r = 0; r < brickRowCount; r++) {
             let b = bricks[c][r];
@@ -341,14 +343,25 @@ function nextstage() { //다음 level 이동
         }
     }
     if (flag == 1) { //현 페이지 기준으로 다음 스테이지 이동
-        if (URL.endsWith('level1.html')) {
-            location.href = 'level2.html';
+
+        //주소에 레벨을 비롯한 색상, 배경등의 정보를 함께 넘겨 줘서 그 정보를 바탕으로 현제 레벨을 파악함.
+        //다음스테이지로 넘어갈때 레벨, 색상, 배경, bgm정보등을 url 주소에 포함시켜 넘겨줘야함
+        level_info++;  
+        let values_str="?";   
+        values_str = values_str + "level_info=" + level_info;     //
+        values_str = values_str + "&ballColor=" + ballColor;
+        values_str = values_str + "&blockColor=" + blockColor;
+        values_str = values_str + "&background_IMg=" + background_IMg;
+        values_str = values_str + "&selectedBgm=" + selectedBgm;
+        values_str = values_str + "&volume_value=" + volume_value;
+        if (level_info == 2) {
+            location.href = 'level2.html' + values_str;
         }
-        else if (URL.endsWith('level2.html')) {
-            location.href = 'level3.html';
+        else if (level_info == 3) {
+            location.href = 'level3.html' + values_str;
         }
-        else if (URL.endsWith('level3.html')) {
-            location.href = 'end.html';
+        else if (level_info == 4) {
+            location.href = 'end.html' + values_str;
         }
     }
 }
@@ -368,7 +381,13 @@ function draw() {
     if (itemType > 0) {
         itemEffect();
     }
-    requestAnimationFrame(draw);
+    gameMove = requestAnimationFrame(draw);
+
+    if(gameOn_Off == false) //한번 죽으면 멈춤, 다시 움직이면 실행
+    {
+        cancelAnimationFrame(gameMove);
+        before_excution();
+    }
 }
 
 function move() {
@@ -402,6 +421,8 @@ function move() {
         } else { // 공이 나갈 경우
             life--;
             init();
+            //cancelAnimationFrame(gameMove); 
+            gameOn_Off = false;
         }
     }
     x += dx; //벽, 바닥 충돌 없을경우 일반 이동
@@ -447,8 +468,8 @@ function init() {
 function setBall() { //공위치, 속도 초기화
     x = (canvas.width - 100) / 2;
     y = canvas.height - 30;
-    dx = 1;
-    dy = -1;
+    dx = 1 * 2;
+    dy = -1 * 2;
     ballRadius = 10;
 }
 
@@ -458,4 +479,68 @@ function setPaddle() { //패들 위치, 크기, 속도 초기화
     paddledx = 7;
 }
 
-draw();
+//draw();
+
+////////////////////////////////////////////
+
+
+function draw_object() { //게임을 시작하면 바로 실행되지 않고 오브젝트들을 그리기만 한후 move함수 실행 x;
+    ctx.clearRect(0, 0, canvas.width - 100, canvas.height);
+    drawBricks();
+    drawBall();
+    drawPaddle(); 
+    //move();
+    collisionDetection();
+    arrangeItem();
+    nextstage();
+
+    requestAnimationFrame(draw_object);
+}
+draw_object();
+
+function before_excution() {
+    document.addEventListener('keydown', function T(e) { //게임 시작후 정지화면에서 좌우 방향키를 누르면 게임 실행
+        if($("#setting-popup").attr("class") == "popup")
+        {
+            return;
+        }
+        if (e.key == "Left" || e.key == "ArrowLeft") //게임 시작후 왼쪽키를 누르면 왼쪽으로 튕겨 나감
+        {
+            dx = -1 * 2;
+        }
+        if (e.key == "Right" || e.key == "ArrowRight" || e.key == "Left" || e.key == "ArrowLeft") {
+            $("#start-info").hide();
+            gameOn_Off = true;
+            draw();
+            bgmStart(selectedBgm);
+            document.removeEventListener('keydown', T); //한번 실행 후 이벤트리스너 삭제
+        }
+    });
+};
+before_excution();
+
+ctx.beginPath();
+ctx.moveTo(500, 0);
+ctx.lineTo(500, 500);
+ctx.stroke();
+function Neexxtt() 
+{
+    level_info++;
+    let values_str="?";
+    values_str = values_str + "level_info=" + level_info;
+    values_str = values_str + "&ballColor=" + ballColor;
+    values_str = values_str + "&blockColor=" + blockColor;
+    values_str = values_str + "&background_IMg=" + background_IMg;
+    values_str = values_str + "&selectedBgm=" + selectedBgm;
+    values_str = values_str + "&volume_value=" + volume_value;
+    if (level_info == 2) {
+        location.href = 'level2.html' + values_str;
+    }
+    else if (level_info == 3) {
+        location.href = 'level3.html' + values_str;
+    }
+    else if (level_info == 4) {
+        location.href = 'end.html' + values_str;
+    }
+
+}
