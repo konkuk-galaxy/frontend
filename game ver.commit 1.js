@@ -216,7 +216,6 @@ function itemEffect() {
         
     }
     if(itemType === 3){ // 패들 크기 변화
-       화
         if (paddleitem <3){
             paddleWidth = paddleWidth*1.5;
             paddledx = paddledx*0.66;
