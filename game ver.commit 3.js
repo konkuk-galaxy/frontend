@@ -393,11 +393,11 @@ function nextstage() {
 }
 
 function levelUp() {
-    if (level_info === 1) {
+    if (level_info == 1) {
         level_info = 2;
-    } else if (level_info === 2) {
+    } else if (level_info == 2) {
         level_info = 3;
-    } else if (level_info === 3) {
+    } else if (level_info == 3) {
         level_info = 4;
     }
 }
@@ -512,10 +512,17 @@ document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
 function mouseMoveHandler(e){
-    let relativeX = e.clientX - canvas.offsetLeft ;
+    let relativeX = e.clientX - ($(window).width() - canvas.width)/2;
+    
+    console.log(relativeX);
+
+    if(gameOn_Off == false)
+    {
+        return;
+    }
       
-    if( relativeX > 0 && relativeX < canvas.width - 100) { // 오른쪽을 막는다. 
-        paddleX = relativeX  - paddleWidth
+    if( relativeX > paddleWidth/2 && relativeX < canvas.width - (100 + paddleWidth/2)) { // 오른쪽을 막는다. 
+        paddleX = relativeX  - paddleWidth/2
     }
     
 }
@@ -556,10 +563,6 @@ function draw_object() { //게임을 시작하면 바로 실행되지 않고 오
     drawBricks();
     drawBall();
     drawPaddle(); 
-    //move();
-    collisionDetection();
-    arrangeItem();
-    nextstage();
 
     requestAnimationFrame(draw_object);
 }
@@ -618,4 +621,4 @@ function drawSideBar(){
 }
 
 drawSideBar();
-draw();
+//draw();
