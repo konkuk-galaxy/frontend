@@ -385,6 +385,10 @@ function nextstage() { //다음 level 이동
         //다음스테이지로 넘어갈때 레벨, 색상, 배경, bgm정보등을 url 주소에 포함시켜 넘겨줘야함
         
         //level_info++;  
+        
+        gameOn_Off = false;
+       
+        
         if (level_info == 1) {
             level_info = 2;
         }
@@ -585,6 +589,8 @@ ctx.stroke();
 function Neexxtt() 
 {
     //level_info++;  
+    gameOn_Off = false;
+    
     if (level_info == 1) {
         level_info = 2;
     }
