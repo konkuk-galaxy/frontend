@@ -82,6 +82,9 @@ imgItem_meteor.src = "img/item_meteor.jpg"
 const imgHealthBar = new Image();
 imgHealthBar.src = "img/health_Bar.png"
 
+const imgLife = new Image();
+imgLife.src = "img/life_text.png"
+
 function loadbrick() {
     //html body에 p 태그 #col,row에서 블록 칸수를 때옴
     //무조건 상단 배치 
@@ -243,7 +246,6 @@ function itemEffect() {
         drawItem();
         itemType = 0;
         itemUse = 0;
-        itemPosY = 10000;
 
     }
     if (itemType === 3) { // 패들 크기 변화
@@ -264,7 +266,6 @@ function itemEffect() {
         }   
         itemType = 0;
         itemUse = 0;
-        itemPosY = 10000;
     }
     if (itemType === 4) { // 공 느리게
         dy = dy / 1.35;
@@ -274,17 +275,16 @@ function itemEffect() {
         drawItem();
         itemType = 0;
         itemUse = 0;
-        itemPosY = 10000;
     }
     if (itemType === 5) { // 유성
-        ctx.drawImage(imgItem_meteor, itemPosX, itemPosY, 24, 24);
-        if (itemPosX > paddleX && itemPosX < paddleX + paddleWidth && itemPosY > canvas.height - 36 && itemPosY < canvas.height) {
+        ctx.drawImage(imgItem_meteor, itemPosX, itemPosY, 30, 40);
+        if (itemPosX > paddleX && itemPosX < paddleX + paddleWidth && itemPosY > canvas.height - 30 && itemPosY < canvas.height) {
             life--;
             itemType = 0;
             itemUse = 0;
             itemPosY = 10000;
         }
-        if (itemPosX < paddleX && itemPosX > paddleX + paddleWidth && itemPosY > canvas.height - 36 && itemPosY < canvas.height) {
+        if (itemPosX < paddleX && itemPosX > paddleX + paddleWidth && itemPosY > canvas.height - 30 && itemPosY < canvas.height) {
             itemType = 0;
             itemUse = 0;
             itemPosY = 10000;
@@ -360,6 +360,8 @@ function nextstage() { //다음 level 이동
 }
 
 function drawHealthBar() {
+     
+    ctx.drawImage(imgLife,565,367,35,24);
     if (life === 1){
         ctx.drawImage(imgHealthBar, 65, 63, 344, 1278, 570, 392, 24, 88);
     }
@@ -455,7 +457,21 @@ function keyUpHandler(e) {
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", mouseMoveHandler, false);
 
+function mouseMoveHandler(e){
+    let relativeX = e.clientX - canvas.offsetLeft ;
+      
+    if( relativeX > 0 && relativeX < canvas.width - 100) { // 오른쪽을 막는다. 
+        paddleX = relativeX  - paddleWidth
+    }
+    
+}
+
+document.onmousemove = function(e){
+    cursorX = e.screenX;
+    cursorY = e.screenY;
+}
 
 function init() {
     //바닥 맞았을 경우 game over 판정 및 위치 초기화 함수
@@ -480,4 +496,10 @@ function setPaddle() { //패들 위치, 크기, 속도 초기화
     paddledx = 7;
 }
 
+function drawSideBar(){
+    ctx.fillStyle = "#070719";
+    ctx.fillRect(500,0,100,500);   
+}
+
+drawSideBar();
 draw();
