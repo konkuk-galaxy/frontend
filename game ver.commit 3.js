@@ -10,8 +10,8 @@ let ctx = canvas.getContext("2d");
 let ballRadius = 10; //ball 속성, startX이며 공 위치
 let x = (canvas.width - 100) / 2;
 let y = canvas.height - 30;
-let dx = 1;
-let dy = -1;
+let dx = 3;
+let dy = -3;
 
 let paddleHeight = 10; //바 높이, 길이, 생성위치
 let paddleWidth = 120;
@@ -77,7 +77,7 @@ const imgItem_gas = new Image();
 imgItem_gas.src = "img/item_gas.jpg"
 
 const imgItem_meteor = new Image();
-imgItem_meteor.src = "img/item_meteor.jpg"
+imgItem_meteor.src = "img/item_meteor.png"
 
 const imgHealthBar = new Image();
 imgHealthBar.src = "img/health_Bar.png"
@@ -145,28 +145,6 @@ function drawBricks() { //벽돌 좌표 지정 + 그리기
     }
 }
 
-
-
-/* 점수 함수 */
-let score = 0;
-function callScore(jewel){
-    if(jewel === 0) // 평범한 자원 획득일 경우 1점 획득
-        score += 1;
-    else if(jewel === 1)//미네랄
-        score += 2;
-    else if(jewel === 2)//가스
-        score += 3;
-    else if(jewel === 3)//사파이어
-        score += 4;
-    else if(jewel === 4)//루비
-        score += 6;
-    else if(jewel === 5)//다이아몬드
-        score += 9;
-}
-let Clevel = document.URL.substring(document.URL.lastIndexOf('/') + 1, document.URL.length);
-
-
-
 function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히트박스와 이미지상의 차이를 매꾸지 않음
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
@@ -184,8 +162,7 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
                     // b.arrangeItem();
                     // b.itemEffect();
                     //아이템 발동 함수
-                    callScore(0); //점수 함수
-
+                    //callScore(); //점수 함수
                 }
 
                 if ( //옆면 히트박스 구현 옆면을 맞을때 그 왼쪽에 있는 애들이 싹다 지워짐
@@ -200,16 +177,7 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
                     // b.arrangeItem();
                     // b.itemEffect();
                     //아이템 발동 함수
-                    callScore(0); //점수 함수
-                     if ( /*대각선으로 부딪힐 때 점수2점증가 방지*/
-                    x >= b.x &&
-                    x <= b.x + brickWidth &&
-                    ((y >= b.y && y <= b.y + 2) || 
-                        (y <= b.y + brickHeight && y >= b.y + brickHeight - 2))
-                ){
-                        score--;
-                     }
-
+                    //callScore(); //점수 함수
                 }
             }
         }
@@ -238,16 +206,17 @@ function arrangeItem() {
 } // 아이템 랜덤 배분 itemType 1~10까지, 깨질때마다 랜덤하게 배분 
 
 function drawItem() { //
-    if (itemLogY < 490 && itemLogX === 501) {
+    if (itemLogY < 470 && itemLogX === 501) {
         itemLogY = 20;
         itemLogY += (itemCnt * 25);
     }
-    if (itemLogY > 490) { // 아이템 아이콘 줄바꿈
+    if (itemLogY === 470) { // 아이템 아이콘 줄바꿈
         itemLogX = 527;
-        itemLogY = itemLogY + (itemCnt * 25) - 475;
+        itemLogY = 20;
     }
-    if (itemLogY < 490 && itemLogX === 527) { // 아이템 아이콘 둘째줄
-        itemLogY = itemLogY + (itemCnt * 25) - 475;
+    if (itemLogY < 470 && itemLogX === 527) { // 아이템 아이콘 둘째줄
+        itemLogY = 20;
+        itemLogY = itemLogY + (itemCnt * 25) - 450;
     }
 }
 function itemEffect() {
@@ -266,6 +235,7 @@ function itemEffect() {
         itemType = 0;
         itemUse = 0;
         itemPosY = 10000;
+        
     }
     if (itemType === 2) { // 공 속도 변화
 
@@ -277,7 +247,6 @@ function itemEffect() {
         drawItem();
         itemType = 0;
         itemUse = 0;
-        itemPosY = 10000;
 
     }
     if (itemType === 3) { // 패들 크기 변화
@@ -298,7 +267,6 @@ function itemEffect() {
         }   
         itemType = 0;
         itemUse = 0;
-        itemPosY = 10000;
     }
     if (itemType === 4) { // 공 느리게
         dy = dy / 1.35;
@@ -308,17 +276,17 @@ function itemEffect() {
         drawItem();
         itemType = 0;
         itemUse = 0;
-        itemPosY = 10000;
     }
     if (itemType === 5) { // 유성
-        ctx.drawImage(imgItem_meteor, itemPosX, itemPosY, 30, 40);
-        if (itemPosX > paddleX && itemPosX < paddleX + paddleWidth && itemPosY > canvas.height - 30 && itemPosY < canvas.height) {
+        ctx.drawImage(imgItem_meteor, itemPosX, itemPosY, 30, 50);
+        if (itemPosX > paddleX && itemPosX < paddleX + paddleWidth && itemPosY > canvas.height - 20 && itemPosY < canvas.height) {
             life--;
+            if(life === 0){ init();}
             itemType = 0;
             itemUse = 0;
             itemPosY = 10000;
         }
-        if (itemPosX < paddleX && itemPosX > paddleX + paddleWidth && itemPosY > canvas.height - 30 && itemPosY < canvas.height) {
+        if (itemPosX < paddleX && itemPosX > paddleX + paddleWidth && itemPosY > canvas.height - 20 && itemPosY < canvas.height) {
             itemType = 0;
             itemUse = 0;
             itemPosY = 10000;
@@ -332,32 +300,26 @@ function itemEffect() {
             ctx.drawImage(imgItem_diamond, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(5);/**/
         }
         if (jewelType === 2) {
             ctx.drawImage(imgItem_saphire, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(3);/**/
-
         }
         if (jewelType === 3) {
             ctx.drawImage(imgItem_ruby, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(4);/**/
         }
         if (jewelType === 4) {
             ctx.drawImage(imgItem_gas, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(2);/**/
         }
         if (jewelType === 5) {
             ctx.drawImage(imgItem_mineral, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(1);/**/
         }
         itemType = 0;
         itemUse = 0;
@@ -388,22 +350,19 @@ function nextstage() { //다음 level 이동
     }
     if (flag == 1) { //현 페이지 기준으로 다음 스테이지 이동
         if (URL.endsWith('level1.html')) {
-            localStorage.setItem('score1',score);/*점수를 game.js로 전달*/
             location.href = 'level2.html';
         }
         else if (URL.endsWith('level2.html')) {
-            localStorage.setItem('score2',score);/*점수를 game.js로 전달*/
             location.href = 'level3.html';
         }
         else if (URL.endsWith('level3.html')) {
-            localStorage.setItem('score3',score);/*점수를 game.js로 전달*/
             location.href = 'end.html';
         }
     }
 }
 
 function drawHealthBar() {
-
+     
     ctx.drawImage(imgLife,565,367,35,24);
     if (life === 1){
         ctx.drawImage(imgHealthBar, 65, 63, 344, 1278, 570, 392, 24, 88);
@@ -418,6 +377,7 @@ function drawHealthBar() {
         ctx.drawImage(imgHealthBar, 1516, 63, 344, 1278, 570, 392, 24, 88);
     }
 }
+
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width - 100, canvas.height);
@@ -503,11 +463,11 @@ document.addEventListener("mousemove", mouseMoveHandler, false);
 
 function mouseMoveHandler(e){
     let relativeX = e.clientX - canvas.offsetLeft ;
-
+      
     if( relativeX > 0 && relativeX < canvas.width - 100) { // 오른쪽을 막는다. 
         paddleX = relativeX  - paddleWidth
     }
-
+    
 }
 
 document.onmousemove = function(e){
@@ -518,15 +478,6 @@ document.onmousemove = function(e){
 function init() {
     //바닥 맞았을 경우 game over 판정 및 위치 초기화 함수
     if (life == 0) {
-        if(Clevel=='level1.html'){
-            localStorage.setItem('score1',score);/*점수를 game.js로 전달*/
-        }
-        else if(Clevel=='level2.html'){
-            localStorage.setItem('score2',score);/*점수를 game.js로 전달*/
-        }
-        else if(Clevel=='level3.html'){
-            localStorage.setItem('score3',score);/*점수를 game.js로 전달*/
-        }
         location.href = 'end.html';
     }
     setBall();
@@ -536,8 +487,8 @@ function init() {
 function setBall() { //공위치, 속도 초기화
     x = (canvas.width - 100) / 2;
     y = canvas.height - 30;
-    dx = 1;
-    dy = -1;
+    dx = 3;
+    dy = -3;
     ballRadius = 10;
 }
 
