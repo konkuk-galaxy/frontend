@@ -49,6 +49,7 @@ let life = 3;
 let gameMove; //requestAnimationFrame을 이 변수로 받아서 설정창이 열리면 애니매이션을 멈춤
 
 let gameOn_Off = false; //게임이 실행되면 true로 바뀜, 게임 시작 전 설정을 키고 닫으면 공이 움직이는 문제때문에 만듬
+let settingOn_Off = false;
 
 const imgBricks = new Image();
 //imgBricks.onload = draw
@@ -516,7 +517,7 @@ function mouseMoveHandler(e){
     
     console.log(relativeX);
 
-    if(gameOn_Off == false)
+    if(gameOn_Off == false || settingOn_Off == true)
     {
         return;
     }

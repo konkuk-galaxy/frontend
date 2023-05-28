@@ -96,7 +96,10 @@ $(function(){
     //팝업에서 x이미지는 클릭하면 팝업을 닫음
     $(".close-img").on ("click", function() {
         if(gameOn_Off == true)
+        {
             requestAnimationFrame(draw);
+            settingOn_Off = false;
+        }
         $(this).parent().hide();
 		$(this).parent().removeClass("popup");
 	})
@@ -226,6 +229,7 @@ function openSettingPopup()
 
     //세팅창이 열려있지 않을경우
     cancelAnimationFrame(gameMove);
+    settingOn_Off = true;
     close_allPopup();
 	$("#setting-popup").addClass("popup");
 	change_position($(".popup"));
