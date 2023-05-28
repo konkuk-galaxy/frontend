@@ -77,6 +77,9 @@ imgItem_gas.src = "img/item_gas.jpg"
 const imgItem_meteor = new Image();
 imgItem_meteor.src = "img/item_meteor.jpg"
 
+const imgHealthBar = new Image();
+imgHealthBar.src = "img/health_Bar.jpg"
+
 let bricks = []; //벽돌 생성
 for (let c = 0; c < brickColumnCount; c++) {
     bricks[c] = [];
@@ -422,5 +425,4 @@ function setPaddle() { //패들 위치, 크기, 속도 초기화
     paddleWidth = 120;
     paddledx = 7;
 }
-
 draw();
