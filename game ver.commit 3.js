@@ -383,7 +383,17 @@ function nextstage() { //다음 level 이동
     if (flag == 1) { //현 페이지 기준으로 다음 스테이지 이동
         //주소에 레벨을 비롯한 색상, 배경등의 정보를 함께 넘겨 줘서 그 정보를 바탕으로 현제 레벨을 파악함.
         //다음스테이지로 넘어갈때 레벨, 색상, 배경, bgm정보등을 url 주소에 포함시켜 넘겨줘야함
-        level_info++;  
+        
+        //level_info++;  
+        if (level_info == 1) {
+            level_info = 2;
+        }
+        else if (level_info == 2) {
+            level_info = 3;
+        }
+        else if (level_info == 3) {
+            level_info = 4;
+        }
         let values_str="?";   
         values_str = values_str + "level_info=" + level_info;
         values_str = values_str + "&ballColor=" + ballColor;
@@ -523,8 +533,8 @@ function setBall() { //공위치, 속도 초기화
 }
 
 function setPaddle() { //패들 위치, 크기, 속도 초기화
-    paddleX = (canvas.width - 100 - paddleWidth) / 2;
     paddleWidth = 120;
+    paddleX = (canvas.width - 100 - paddleWidth) / 2;
     paddledx = 7;
 }
 
@@ -574,8 +584,17 @@ ctx.lineTo(500, 500);
 ctx.stroke();
 function Neexxtt() 
 {
-    level_info++;
-    let values_str="?";
+    //level_info++;  
+    if (level_info == 1) {
+        level_info = 2;
+    }
+    else if (level_info == 2) {
+        level_info = 3;
+    }
+    else if (level_info == 3) {
+        level_info = 4;
+    }
+    let values_str="?";   
     values_str = values_str + "level_info=" + level_info;
     values_str = values_str + "&ballColor=" + ballColor;
     values_str = values_str + "&blockColor=" + blockColor;
@@ -583,12 +602,15 @@ function Neexxtt()
     values_str = values_str + "&selectedBgm=" + selectedBgm;
     values_str = values_str + "&volume_value=" + volume_value;
     if (level_info == 2) {
+        localStorage.setItem('score1',score);/*점수를 game.js로 전달*/
         location.href = 'level2.html' + values_str;
     }
     else if (level_info == 3) {
+        localStorage.setItem('score2',score);/*점수를 game.js로 전달*/
         location.href = 'level3.html' + values_str;
     }
     else if (level_info == 4) {
+        localStorage.setItem('score3',score);/*점수를 game.js로 전달*/
         location.href = 'end.html' + values_str;
     }
 

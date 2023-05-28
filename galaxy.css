@@ -54,7 +54,8 @@ body {
   right: 0;
 }
 .main-menu {
-  margin: 60px auto;
+  /**margin: 60px auto;**/
+  margin: 120px auto;
   padding: 10px;
   width: 200px;
   height: 60px;
@@ -205,12 +206,12 @@ body {
   left: 180px;
 
 }
-#restart-btn {
+#restart-btn, #toMenu-btn {
   cursor: pointer;
   width: 300px;
-  height: 100px;
-  font-size: 25px;
-  border-radius: 15px;
+  height: 50px;
+  font-size: 20px;
+  border-radius: 5px;
   background-color: rgb(240, 248, 255);
   background-color: rgba(122, 171, 214, 0.9);
 }

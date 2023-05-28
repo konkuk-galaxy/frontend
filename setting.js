@@ -23,7 +23,7 @@ let volumeTmp;  //볼륨정보 임시 저장
 
 let url_values_arr = []; //url에서 넘겨받은 정보 저장
 let i = 0;
-//const urlParams = new URLSearchParams(window.location.search); 
+
 const url = new URL(window.location.href);
 const urlParams = url.searchParams; 
 
@@ -65,8 +65,6 @@ $(function(){
     $("body").css("background-image",background_IMg);
     $("#select-bgm").val(selectedBgm).prop("selected", true);
     //$("#"+volume_value).prop("selected", true);
-
-
 
     // $("#volume-bar").val(volume_value).trigger("input");
     if(volume_value == 0)  //전달받은 볼륨정보로 볼륨 설정
@@ -201,6 +199,19 @@ $(function(){
         else if (level_info == 4) {
             location.href = 'end.html' + values_str;
         }
+    })
+
+    $("#toMenu-btn").on ("click", function() {
+        console.log("메뉴료 이동");
+        level_info = 0;
+        let values_str="?";
+        values_str = values_str + "level_info=" + level_info;
+        values_str = values_str + "&ballColor=" + ballColor;
+        values_str = values_str + "&blockColor=" + blockColor;
+        values_str = values_str + "&background_IMg=" + background_IMg;
+        values_str = values_str + "&selectedBgm=" + selectedBgm;
+        values_str = values_str + "&volume_value=" + volume_value;
+        location.href = 'main.html' + values_str;
     })
 
 })

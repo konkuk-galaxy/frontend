@@ -19,12 +19,59 @@ let ballContext;   //설정에서의 공 예시창
 
 let volumeTmp = 5;  //볼륨정보 임시 저장
 
+
+let url_values_arr = []; //url에서 넘겨받은 정보 저장
+let i = 0;
+
+const url = new URL(window.location.href);
+const urlParams = url.searchParams; 
+
+const values = urlParams.values();
+
+for(const val of values)  {
+    url_values_arr[i] = val;
+    console.log(url_values_arr[i]);
+    i++;
+    if(i == 6)
+        break;
+}
+if(url_values_arr[0] != null)
+{
+    level_info = url_values_arr[0];
+}
+if(url_values_arr[1] != null && url_values_arr[5] != null)
+{
+    ballColor = url_values_arr[1];
+    blockColor = url_values_arr[2];
+    background_IMg = url_values_arr[3];
+    selectedBgm = url_values_arr[4];
+    volume_value = url_values_arr[5];
+}
+
 $(function(){
     createBackgroundTable();  //설정에서 배경이미지 테이블 생성
     createColorTable($("#blockColorTable"), "blockColorList");   //설정에서 블럭 색상 테이블 생성
     createColorTable($("#ballColorTable"), "ballColorList");   //설정에서 공 색상 테이블 생성
     ballColorShowCanvas();   //설정에서 공 예시 그리기
     blockColorShowCanvas();   //설정에서 블럭 예시 그리기
+
+    $("body").css("background-image",background_IMg);
+    $("#beforeStart").css("background-image",background_IMg);
+    $("#select-bgm").val(selectedBgm).prop("selected", true);
+    //$("#"+volume_value).prop("selected", true);
+
+    // $("#volume-bar").val(volume_value).trigger("input");
+    if(volume_value == 0)  //전달받은 볼륨정보로 볼륨 설정
+    {
+       $("#speakerImg").attr("src", "etc/speaker_off.jpg")
+    }
+    else
+    {
+        $("#speakerImg").attr("src", "etc/speaker_on.jpg")
+    }
+    $("#volume-bar").prop("value", volume_value);
+    $("audio").prop("volume", volume_value/10);
+    $("#vol_val").text(volume_value);
 
     //오디오 autoplay 기능이 안됨, 게임메뉴 전 화면을 생성해서 클릭이벤트 발생으로 bgm 실행
     $("#beforeStart").on("click", function() {  
@@ -130,10 +177,6 @@ $(function(){
         }
     })
 
-    //exit을 클릭하면 창을 닫음
-    $("#game-exit").on("click", function() {
-        window.close();
-    })
 
     
 })
