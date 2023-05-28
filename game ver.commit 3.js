@@ -533,15 +533,8 @@ document.onmousemove = function(e){
 function init() {
     //바닥 맞았을 경우 game over 판정 및 위치 초기화 함수
     if (life == 0) {
-        if (level_info == 1) {
-            localStorage.setItem('score1',score);/*점수를 game.js로 전달*/
-        }
-        else if (level_info == 2) {
-            localStorage.setItem('score2',score);/*점수를 game.js로 전달*/
-        }
-        else if (level_info == 3) {
-            localStorage.setItem('score3',score);/*점수를 game.js로 전달*/
-        }
+        const scoreKey = 'score' + level_info;
+        localStorage.setItem(scoreKey, score); /* 점수를 game.js로 전달 */
         location.href = 'end.html';
     }
     setBall();
@@ -602,20 +595,13 @@ ctx.beginPath();
 ctx.moveTo(500, 0);
 ctx.lineTo(500, 500);
 ctx.stroke();
+
+
 function Neexxtt() 
 {
-    //level_info++;  
+    level_info++;  
     gameOn_Off = false;
     
-    if (level_info == 1) {
-        level_info = 2;
-    }
-    else if (level_info == 2) {
-        level_info = 3;
-    }
-    else if (level_info == 3) {
-        level_info = 4;
-    }
     let values_str="?";   
     values_str = values_str + "level_info=" + level_info;
     values_str = values_str + "&ballColor=" + ballColor;
@@ -623,19 +609,12 @@ function Neexxtt()
     values_str = values_str + "&background_IMg=" + background_IMg;
     values_str = values_str + "&selectedBgm=" + selectedBgm;
     values_str = values_str + "&volume_value=" + volume_value;
-    if (level_info == 2) {
-        localStorage.setItem('score1',score);/*점수를 game.js로 전달*/
-        location.href = 'level2.html' + values_str;
-    }
-    else if (level_info == 3) {
-        localStorage.setItem('score2',score);/*점수를 game.js로 전달*/
-        location.href = 'level3.html' + values_str;
-    }
-    else if (level_info == 4) {
-        localStorage.setItem('score3',score);/*점수를 game.js로 전달*/
-        location.href = 'end.html' + values_str;
-    }
 
+    const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
+    const scoreKey = 'score' + (level_info - 1);
+
+    localStorage.setItem(scoreKey, score); /* 점수를 game.js로 전달 */
+    location.href = nextPage + values_str;
 }
 
 function drawSideBar(){
