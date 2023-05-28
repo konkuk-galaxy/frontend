@@ -139,28 +139,6 @@ function drawBricks() { //벽돌 좌표 지정 + 그리기
     }
 }
 
-
-
-/* 점수 함수 */
-let score = 0;
-function callScore(jewel){
-    if(jewel === 0) // 평범한 자원 획득일 경우 1점 획득
-        score += 1;
-    else if(jewel === 1)//미네랄
-        score += 2;
-    else if(jewel === 2)//가스
-        score += 3;
-    else if(jewel === 3)//사파이어
-        score += 4;
-    else if(jewel === 4)//루비
-        score += 6;
-    else if(jewel === 5)//다이아몬드
-        score += 9;
-}
-let Clevel = document.URL.substring(document.URL.lastIndexOf('/') + 1, document.URL.length);
-
-
-
 function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히트박스와 이미지상의 차이를 매꾸지 않음
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
@@ -178,8 +156,7 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
                     // b.arrangeItem();
                     // b.itemEffect();
                     //아이템 발동 함수
-                    callScore(0); //점수 함수
-
+                    //callScore(); //점수 함수
                 }
 
                 if ( //옆면 히트박스 구현 옆면을 맞을때 그 왼쪽에 있는 애들이 싹다 지워짐
@@ -194,16 +171,7 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
                     // b.arrangeItem();
                     // b.itemEffect();
                     //아이템 발동 함수
-                    callScore(0); //점수 함수
-                     if ( /*대각선으로 부딪힐 때 점수2점증가 방지*/
-                    x >= b.x &&
-                    x <= b.x + brickWidth &&
-                    ((y >= b.y && y <= b.y + 2) || 
-                        (y <= b.y + brickHeight && y >= b.y + brickHeight - 2))
-                ){
-                        score--;
-                     }
-
+                    //callScore(); //점수 함수
                 }
             }
         }
@@ -324,32 +292,26 @@ function itemEffect() {
             ctx.drawImage(imgItem_diamond, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(5);/**/
         }
         if (jewelType === 2) {
             ctx.drawImage(imgItem_saphire, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(3);/**/
-
         }
         if (jewelType === 3) {
             ctx.drawImage(imgItem_ruby, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(4);/**/
         }
         if (jewelType === 4) {
             ctx.drawImage(imgItem_gas, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(2);/**/
         }
         if (jewelType === 5) {
             ctx.drawImage(imgItem_mineral, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(1);/**/
         }
         itemType = 0;
         itemUse = 0;
@@ -380,15 +342,12 @@ function nextstage() { //다음 level 이동
     }
     if (flag == 1) { //현 페이지 기준으로 다음 스테이지 이동
         if (URL.endsWith('level1.html')) {
-            localStorage.setItem('score1',score);/*점수를 game.js로 전달*/
             location.href = 'level2.html';
         }
         else if (URL.endsWith('level2.html')) {
-            localStorage.setItem('score2',score);/*점수를 game.js로 전달*/
             location.href = 'level3.html';
         }
         else if (URL.endsWith('level3.html')) {
-            localStorage.setItem('score3',score);/*점수를 game.js로 전달*/
             location.href = 'end.html';
         }
     }
@@ -479,15 +438,6 @@ document.addEventListener("keyup", keyUpHandler, false);
 function init() {
     //바닥 맞았을 경우 game over 판정 및 위치 초기화 함수
     if (life == 0) {
-        if(Clevel=='level1.html'){
-            localStorage.setItem('score1',score);/*점수를 game.js로 전달*/
-        }
-        else if(Clevel=='level2.html'){
-            localStorage.setItem('score2',score);/*점수를 game.js로 전달*/
-        }
-        else if(Clevel=='level3.html'){
-            localStorage.setItem('score3',score);/*점수를 game.js로 전달*/
-        }
         location.href = 'end.html';
     }
     setBall();
