@@ -103,8 +103,20 @@ function loadbrick() {
 
 loadbrick(); //실행 해줘야 brickRowCount 값이 바뀜
 
-
-
+/* 점수 함수 */
+let score = 0;
+function callScore(jewel){
+    if(jewel === 0) // 평범한 자원 획득일 경우 1점 획득
+        score += 1;
+    else if(jewel === 1)
+        score += 2;
+    else if(jewel === 2)
+        score += 4;
+    else if(jewel === 3)
+        score += 9;
+    
+    console.log(jewel + "자원 획득 -> 점수 증가! " + score);
+}
 
 let bricks = []; //벽돌 생성
 for (let c = 0; c < brickColumnCount; c++) {
@@ -303,26 +315,31 @@ function itemEffect() {
             ctx.drawImage(imgItem_diamond, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
+            callScore(3);
         }
         if (jewelType === 2) {
             ctx.drawImage(imgItem_saphire, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
+            callScore(3);
         }
         if (jewelType === 3) {
             ctx.drawImage(imgItem_ruby, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
+            callScore(2);
         }
         if (jewelType === 4) {
             ctx.drawImage(imgItem_gas, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
+            callScore(1);
         }
         if (jewelType === 5) {
             ctx.drawImage(imgItem_mineral, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
+            callScore(0);
         }
         itemType = 0;
         itemUse = 0;
@@ -516,6 +533,15 @@ document.onmousemove = function(e){
 function init() {
     //바닥 맞았을 경우 game over 판정 및 위치 초기화 함수
     if (life == 0) {
+        if (level_info == 1) {
+            localStorage.setItem('score1',score);/*점수를 game.js로 전달*/
+        }
+        else if (level_info == 2) {
+            localStorage.setItem('score2',score);/*점수를 game.js로 전달*/
+        }
+        else if (level_info == 3) {
+            localStorage.setItem('score3',score);/*점수를 game.js로 전달*/
+        }
         location.href = 'end.html';
     }
     setBall();
