@@ -395,7 +395,7 @@ function nextstage() {
 }
 
 function levelUp() {
-    if(levelUp_used == true) //만약 nextstage()가 계속해서 반복 호출되는 버그가 또 발생할 시  levelUp()함수가 여러번 호출되어 다시 end.html로 이동하는 문제 원청 봉쇄
+    if(levelUp_used == true) //만약 nextstage()가 계속해서 반복 호출되는 버그가 또 발생할 시  levelUp()함수가 여러번 호출되어 end.html로 이동하는 문제 원천 봉쇄
     {
         return;
     }
