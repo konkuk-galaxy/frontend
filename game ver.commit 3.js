@@ -50,6 +50,7 @@ let gameMove; //requestAnimationFrame을 이 변수로 받아서 설정창이 �
 
 let gameOn_Off = false; //게임이 실행되면 true로 바뀜, 게임 시작 전 설정을 키고 닫으면 공이 움직이는 문제때문에 만듬
 let settingOn_Off = false;
+let levelUp_used = false;
 
 const imgBricks = new Image();
 //imgBricks.onload = draw
@@ -394,6 +395,11 @@ function nextstage() {
 }
 
 function levelUp() {
+    if(levelUp_used == true) //만약 nextstage()가 계속해서 반복 호출되는 버그가 또 발생할 시  levelUp()함수가 여러번 호출되어 다시 end.html로 이동하는 문제 원청 봉쇄
+    {
+        return;
+    }
+
     if (level_info == 1) {
         level_info = 2;
     } else if (level_info == 2) {
@@ -401,6 +407,7 @@ function levelUp() {
     } else if (level_info == 3) {
         level_info = 4;
     }
+    levelUp_used = true;
 }
 
 
