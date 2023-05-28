@@ -21,6 +21,16 @@ $(function(){
     ballColorShowCanvas();   //설정에서 공 예시 그리기
     blockColorShowCanvas();   //설정에서 블럭 예시 그리기
 
+    $("#easy > a").on("click",function() {
+        localStorage.setItem('difficulty',1);
+    })
+    $("#normal > a").on("click",function() {
+        localStorage.setItem('difficulty',2);
+    })
+    $("#hard > a").on("click",function() {
+        localStorage.setItem('difficulty',3);
+    })
+
     //오디오 autoplay 기능이 안됨, 게임메뉴 전 화면을 생성해서 클릭이벤트 발생으로 bgm 실행
     $("#beforeStart").on("click", function() {  
         bgmStart("bgm1");
