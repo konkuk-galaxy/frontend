@@ -7,10 +7,30 @@ $("#btn").click(function() {
     
     if(index == 0)
     {
-        $("#textp").html("<br>탐사작업에 대한 설명은 내가 할걸세.<br>")
+        var tmp = $("<div/>");
+        tmp.addClass("btn2");
+        
+        var tmp2 = $("<p/>");
+        tmp2.text("괜찮습니다!");
+        tmp.append(tmp2);
+        $("#text").append(tmp);
+        $(".btn2").click(function() {
+            if(difficulty == 1)
+            location.href="level1.html"
+            else if(difficulty == 2)
+            location.href="level2.html"
+            else
+            location.href="level3.html"
+        });
+        $("#btn").css("left","380px")
+        $("#btn").text("필요합니다!")
+        $("#textp").html("<br>탐사작업에 대한 설명은 내가 할걸세. 설명이 필요하나?<br>")
     }
     else if(index == 1)
     {
+        $("#btn").css("left","432px")
+        $("#btn").text("다음")
+        $(".btn2").hide()
         $("img").attr("src", "tutorial/960x540image2.png");
         $("#textp").html("<br>먼저 저기 위에 벽돌들이 보이나? 우리가 탐사해야 할 곳들이지.<br>")
     }
@@ -32,8 +52,15 @@ $("#btn").click(function() {
     }
     else if(index == 5) 
     {
-        $("img").attr("src", "tutorial/960x540image1.png");
-        $("#textp").html("<br>목표는 자원수집이네. [미정]점을 넘기게! 점수는 자원 획득으로 얻을 수 있고 각 자원별로 점수가 다르다는 것을 참고하게!<br>")
+        $("img").attr("src", "tutorial/960x540image6.png");
+
+        if(difficulty == 1)
+            $("#textp").html("<br>목표는 자원수집이네. 20점을 넘기게! 점수는 자원 획득으로 얻을 수 있고 각 자원별로 점수가 다르다는 것을 참고하게!<br>")
+        else if(difficulty == 2)
+        $("#textp").html("<br>목표는 자원수집이네. 50점을 넘기게! 점수는 자원 획득으로 얻을 수 있고 각 자원별로 점수가 다르다는 것을 참고하게!<br>")
+        else
+        $("#textp").html("<br>목표는 자원수집이네. 100점을 넘기게! 점수는 자원 획득으로 얻을 수 있고 각 자원별로 점수가 다르다는 것을 참고하게!<br>")
+           
         $("#buttonp").html("알겠습니다!")
     }
     else
