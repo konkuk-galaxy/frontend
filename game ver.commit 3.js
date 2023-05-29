@@ -544,6 +544,7 @@ function init() {
     //바닥 맞았을 경우 game over 판정 및 위치 초기화 함수
     if (life == 0) {
         const scoreKey = 'score' + level_info;
+        localStorage.setItem('life', life);
         localStorage.setItem(scoreKey, score); /* 점수를 game.js로 전달 */
         location.href = 'end.html';
     }
@@ -629,4 +630,10 @@ function drawSideBar(){
 }
 
 drawSideBar();
+
+function checkLife() {
+    localStorage.setItem('life', life);
+}
+
+setInterval(checkLife, 50);
 //draw();
