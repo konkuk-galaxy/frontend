@@ -49,6 +49,23 @@ body {
   background-color: rgba(240, 248, 255, 0.5);
   z-index: 1;
 }
+#level-select {
+  font-weight:bold;
+}
+#info-setting {
+  font-weight:bold;
+}
+.mainToStage {
+  font-weight: bold;
+}
+#stage-info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color:#A1BBA2;
+  font-size:24px;
+  font-weight:bold;
+}
 #setting-img {
   position: absolute;
   top: 0;

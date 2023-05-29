@@ -7,12 +7,6 @@ const color = [
     "gray", "aliceblue", "blueviolet", "brown", "navy"
 ];
 
-localStorage.setItem('volume_value',5);
-localStorage.setItem('ballColor',"aliceblue");
-localStorage.setItem('blockColor',"aliceblue");
-localStorage.setItem('background_IMg',backgroundUrl[0]);
-localStorage.setItem('selectedBgm',"bgm1");
-
 let ballColor = color[10];  //공 색상 정보 저장
 let blockColor = color[10];  //블럭 색상 정보 저장
 let background_IMg = backgroundUrl[0];  //배경 이미지 정보 저장

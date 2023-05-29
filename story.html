@@ -11,6 +11,17 @@
     #up {position:absolute; top:119px;left:160px;}
     #imgbtn {position:absolute; top:119px;left:1025px;}
   </style>
+  <script>
+  const backgroundUrl = ["url('background/space-g52a222904_1920.jpg')",
+ "url('background/space-g10131bb9e_1920.jpg')",
+ "url('background/stars-g5d44ea9a5_1920.jpg')"];
+ 
+    localStorage.setItem('volume_value',5); 
+    localStorage.setItem('ballColor',"aliceblue");
+    localStorage.setItem('blockColor',"aliceblue");
+    localStorage.setItem('background_IMg',backgroundUrl[0]);
+    localStorage.setItem('selectedBgm',"bgm1");
+  </script>
 </head>
 <body>
   <div id = "under">
@@ -18,9 +29,6 @@
   </div>
   <div id = "up">
     <video src = "story/video960x540.mp4" autoplay controls width="960" height="540"> 
-  </div>
-  <div id = "up">
-    <video src = "story_video960x540.mp4" autoplay controls width="960" height="540"> 
   </div>
   <br>
   <a href = "main.html">

@@ -10,9 +10,11 @@ score = parseInt(score);
 let level = localStorage.getItem('level');
 level = parseInt(level);
 let infostr = "esc키를 누르면 설정창이 열립니다. ";
-let tempstr =infostr + score + "점 : 스테이지" + level;
+let stagestr = "스테이지 : "
+let tempstr2 = stagestr + level + "<br>" + "점수 : " + score;
 $(function() {
-    $("#info-setting").text(tempstr);
+    $("#info-setting").text(infostr);
+    $("#stage-info").html(tempstr2);
 })
 
 
@@ -134,8 +136,8 @@ function callScore(jewel){
     else if(jewel === 4)
         score += 10;
 
-    tempstr = infostr + score + "점 : 스테이지" + level;
-    $("#info-setting").text(tempstr);
+    let tempstr2 = stagestr + level + "<br>" + "점수 : " + score;
+    $("#stage-info").html(tempstr2);
 
     console.log(jewel + "자원 획득 -> 점수 증가! " + score);
     if(difficulty == 1 && score >= 50)
@@ -249,7 +251,10 @@ function groupItem() {
         if(level >= 5)
         {
             if(randomValue <= (5 * 5 * difficulty))
+            {
             itemGroup = 0;
+            itemType = 1;
+            }
             else
             {
             itemGroup = 1;
@@ -261,7 +266,10 @@ function groupItem() {
         else
         {
             if(randomValue <= (5 * level * difficulty))
+            {
             itemGroup = 0;
+            itemType = 1;
+            }
             else
             {
             itemGroup = 1;
