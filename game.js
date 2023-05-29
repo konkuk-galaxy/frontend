@@ -108,14 +108,16 @@ loadbrick(); //실행 해줘야 brickRowCount 값이 바뀜
 /* 점수 함수 */
 let score = 0;
 function callScore(jewel){
-    if(jewel === 0) // 평범한 자원 획득일 경우 1점 획득
+    if(jewel === 0) // 평범한 자원 획득일 경우 1점 획득-->미네랄
         score += 1;
-    else if(jewel === 1)
-        score += 2;
-    else if(jewel === 2)
-        score += 4;
-    else if(jewel === 3)
-        score += 9;
+    else if(jewel === 1)//가스
+        score += 3;
+    else if(jewel === 2)//사파이어
+        score += 5;
+    else if(jewel === 3)//루비
+        score += 7;
+    else if(jewel === 4)//다이아몬드
+        score += 10;
     
     console.log(jewel + "자원 획득 -> 점수 증가! " + score);
 }
@@ -317,7 +319,7 @@ function itemEffect() {
             ctx.drawImage(imgItem_diamond, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(3);
+            callScore(4);
         }
         if (jewelType === 2) {
             ctx.drawImage(imgItem_saphire, itemLogX, itemLogY, 24, 24);
