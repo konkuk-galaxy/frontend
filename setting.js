@@ -8,17 +8,18 @@ const color = [
 ];
 
 
+let level_info = 1;
 let ballColor = color[10];  //공 색상 정보 저장
 let blockColor = color[10];  //블럭 색상 정보 저장
 let background_IMg = backgroundUrl[0];  //배경 이미지 정보 저장
 let selectedBgm = "bgm1"; //선택된 bgm을 저장
 let volume_value = 5;
 
+
 let blockContext;  //설정에서의 블럭 예시창
 let ballContext;   //설정에서의 공 예시창
 
-let volumeTmp = 5;  //볼륨정보 임시 저장
-
+let volumeTmp;  //볼륨정보 임시 저장
 
 let url_values_arr = []; //url에서 넘겨받은 정보 저장
 let i = 0;
@@ -48,24 +49,20 @@ if(url_values_arr[1] != null && url_values_arr[5] != null)
     volume_value = url_values_arr[5];
 }
 
+
+
+
 $(function(){
+    
+
     createBackgroundTable();  //설정에서 배경이미지 테이블 생성
     createColorTable($("#blockColorTable"), "blockColorList");   //설정에서 블럭 색상 테이블 생성
     createColorTable($("#ballColorTable"), "ballColorList");   //설정에서 공 색상 테이블 생성
     ballColorShowCanvas();   //설정에서 공 예시 그리기
     blockColorShowCanvas();   //설정에서 블럭 예시 그리기
+    
 
-    $("#easy > a").on("click",function() {
-        localStorage.setItem('difficulty',1);
-    })
-    $("#normal > a").on("click",function() {
-        localStorage.setItem('difficulty',2);
-    })
-    $("#hard > a").on("click",function() {
-        localStorage.setItem('difficulty',3);
-    })
     $("body").css("background-image",background_IMg);
-    $("#beforeStart").css("background-image",background_IMg);
     $("#select-bgm").val(selectedBgm).prop("selected", true);
     //$("#"+volume_value).prop("selected", true);
 
@@ -81,30 +78,13 @@ $(function(){
     $("#volume-bar").prop("value", volume_value);
     $("audio").prop("volume", volume_value/10);
     $("#vol_val").text(volume_value);
-
-    //오디오 autoplay 기능이 안됨, 게임메뉴 전 화면을 생성해서 클릭이벤트 발생으로 bgm 실행
-    $("#beforeStart").on("click", function() {  
-        bgmStart("bgm1");
-        $(this).hide();
-    })
-
+    
     //level select 클릭시 레벨선택 팝업 띄움
     $("#level-select").on ("click", function() {
         close_allPopup();
 		$("#level-popup").addClass("popup");
 		change_position($(".popup"));
 		$("#level-popup").show();
-
-        $(".mainToStage").each(function() {
-            let url_str = $(this).prop("id");
-            url_str = url_str + "&ballColor=" + ballColor;
-            url_str = url_str + "&blockColor=" + blockColor;
-            url_str = url_str + "&background_IMg=" + background_IMg;
-            url_str = url_str + "&selectedBgm=" + selectedBgm;
-            url_str = url_str + "&volume_value=" + volume_value;
-            $(this).prop("href", url_str);
-        })
-    
 	})
 
     //설정 이미지 클릭시 설정팝업을 띄움
@@ -115,6 +95,11 @@ $(function(){
     
     //팝업에서 x이미지는 클릭하면 팝업을 닫음
     $(".close-img").on ("click", function() {
+        if(gameOn_Off == true)
+        {
+            requestAnimationFrame(draw);
+            settingOn_Off = false;
+        }
         $(this).parent().hide();
 		$(this).parent().removeClass("popup");
 	})
@@ -130,18 +115,23 @@ $(function(){
     $(".blockColorList").on ("click", function() {
         let str = $(this).css("background-color");
         blockColor = str;
-        drawBlock(blockColor);
+        drawExBlock(blockColor);
     })
 
     //설정에서 공 색상을 선택하면 선택한 색상으로 변경
     $(".ballColorList").on ("click", function() {
         let str = $(this).css("background-color");
         ballColor = str;
-        drawBall(ballColor);
+        drawExBall(ballColor);
     })
 
     //bgm을 선택하면 선택한 bgm으로 변경
     $("#select-bgm").on ("change", function() {
+        if(gameOn_Off == false)
+        {
+            selectedBgm = $("#select-bgm option:selected").val();
+            return;
+        }
         selectedBgm = $("#select-bgm option:selected").val();
         initAllBgm();
         bgmStart(selectedBgm);
@@ -184,19 +174,62 @@ $(function(){
         {
             openSettingPopup();
         }
+    });
+
+    //exit을 클릭하면 창을 닫음
+    $("#game-exit").on("click", function() {
+        window.close();
     })
 
+    //다시시작 버튼을 클릭하면 스테이지 다시 시작, 수정한 정보들을 가지고 다시 페이지를 로드함
+    $("#restart-btn").on ("click", function() {
+        let values_str="?";
+        values_str = values_str + "level_info=" + level_info;
+        values_str = values_str + "&ballColor=" + ballColor;
+        values_str = values_str + "&blockColor=" + blockColor;
+        values_str = values_str + "&background_IMg=" + background_IMg;
+        values_str = values_str + "&selectedBgm=" + selectedBgm;
+        values_str = values_str + "&volume_value=" + volume_value;
+        if (level_info == 1) {
+            location.href = 'level1.html' + values_str;
+        }
+        else if (level_info == 2) {
+            location.href = 'level2.html' + values_str;
+        }
+        else if (level_info == 3) {
+            location.href = 'level3.html' + values_str;
+        }
+        else if (level_info == 4) {
+            location.href = 'end.html' + values_str;
+        }
+    })
 
-    
+    $("#toMenu-btn").on ("click", function() {
+        console.log("메뉴료 이동");
+        level_info = 0;
+        let values_str="?";
+        values_str = values_str + "level_info=" + level_info;
+        values_str = values_str + "&ballColor=" + ballColor;
+        values_str = values_str + "&blockColor=" + blockColor;
+        values_str = values_str + "&background_IMg=" + background_IMg;
+        values_str = values_str + "&selectedBgm=" + selectedBgm;
+        values_str = values_str + "&volume_value=" + volume_value;
+        location.href = 'main.html' + values_str;
+    })
+
 })
 
 function openSettingPopup()
 {
-    if($("#setting-popup").attr("class") == "popup")
+    if($("#setting-popup").attr("class") == "popup") //이미 세팅창이 열려있을경우
     {
         $(".close-img").trigger("click");
         return;
     }
+
+    //세팅창이 열려있지 않을경우
+    cancelAnimationFrame(gameMove);
+    settingOn_Off = true;
     close_allPopup();
 	$("#setting-popup").addClass("popup");
 	change_position($(".popup"));
@@ -248,10 +281,10 @@ function createColorTable(obj, className)
 function ballColorShowCanvas() 
 {
 	ballContext=document.getElementById("ballColorShow").getContext("2d");
-	drawBall(ballColor);
+	drawExBall(ballColor);
 }
 
-function drawBall(color_info) {
+function drawExBall(color_info) {
 	ballContext.clearRect(0,0,100,100);
 	ballContext.beginPath();
 	ballContext.arc(50,50,10,0,2.0*Math.PI, true);
@@ -262,10 +295,10 @@ function drawBall(color_info) {
 function blockColorShowCanvas()
 {
     blockContext=document.getElementById("blockColorShow").getContext("2d");
-    drawBlock(blockColor);
+    drawExBlock(blockColor);
 }
 
-function drawBlock(color) {
+function drawExBlock(color) {
 	blockContext.clearRect(0,0,100,100);
 	blockContext.beginPath();
     blockContext.roundRect(20,45,60,10,2);
@@ -288,9 +321,3 @@ function initAllBgm() {
         all_bgm[i].pause();
     }
 }
-
-
-
-localStorage.setItem('score1',0);/*점수를 초기화*/
-localStorage.setItem('score2',0);
-localStorage.setItem('score3',0);
