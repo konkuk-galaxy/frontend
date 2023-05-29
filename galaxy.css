@@ -54,7 +54,8 @@ body {
   right: 0;
 }
 .main-menu {
-  margin: 60px auto;
+  /**margin: 60px auto;**/
+  margin: 120px auto;
   padding: 10px;
   width: 200px;
   height: 60px;
@@ -64,6 +65,7 @@ body {
   background-color: aliceblue;
   background-color: rgba(240, 248, 255, 0.6);
   border-radius: 15px;
+  cursor: pointer;
 }
 #level-popup {
   display: none;
@@ -122,6 +124,11 @@ body {
   float: right;
   cursor: pointer;
 }
+
+#setting-img {
+  cursor: pointer;
+}
+
 .popup {
   margin: auto;
   overflow: hidden;
@@ -135,7 +142,12 @@ body {
   border-radius: 10px;
   
 }
+.color-example {
+  overflow: hidden;
+  margin: 5px;
+}
 .colorShowCanvas {
+  float: left;
   background-color: rgb(240, 248, 255);
   background-color: rgba(240, 248, 255, 0.5);
 }
@@ -167,4 +179,39 @@ body {
 #vol_val {
   background-color: white;
   width: 40px;
+}
+#info-setting {
+  padding: 5px;
+  color: rgb(198, 219, 127);
+  font-size: 18px;
+  position: absolute;
+  bottom: 0;
+
+}
+
+#myCanvas {
+  background-color: rgb(240, 248, 255);
+  background-color: rgba(240, 248, 255, 0.5);
+}
+
+#start-info {
+  position: absolute;
+  width: 500px;
+  height: 80px;
+  line-height: 80px;
+  text-align: center;
+  font-size: 30px;
+  color: yellow;
+  top: 230px;
+  left: 180px;
+
+}
+#restart-btn, #toMenu-btn {
+  cursor: pointer;
+  width: 300px;
+  height: 50px;
+  font-size: 20px;
+  border-radius: 5px;
+  background-color: rgb(240, 248, 255);
+  background-color: rgba(122, 171, 214, 0.9);
 }
