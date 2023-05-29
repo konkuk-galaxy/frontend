@@ -98,8 +98,8 @@ $(function(){
         if(gameOn_Off == true)
         {
             requestAnimationFrame(draw);
-            settingOn_Off = false;
         }
+        settingOn_Off = false;
         $(this).parent().hide();
 		$(this).parent().removeClass("popup");
 	})

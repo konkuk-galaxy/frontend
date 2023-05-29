@@ -75,7 +75,7 @@ $(function(){
 
     //오디오 autoplay 기능이 안됨, 게임메뉴 전 화면을 생성해서 클릭이벤트 발생으로 bgm 실행
     $("#beforeStart").on("click", function() {  
-        bgmStart("bgm1");
+        bgmStart(selectedBgm);
         $(this).hide();
     })
 
