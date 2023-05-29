@@ -389,7 +389,7 @@ function nextstage() {
         const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
         const scoreKey = 'score' + (level_info - 1);
     
-        localStorage.setItem(scoreKey, score); /* 점수를 game.js로 전달 */
+        localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
         location.href = nextPage + values_str;
     }
 }
@@ -545,7 +545,7 @@ function init() {
     if (life == 0) {
         const scoreKey = 'score' + level_info;
         localStorage.setItem('life', life);
-        localStorage.setItem(scoreKey, score); /* 점수를 game.js로 전달 */
+        localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
         location.href = 'end.html';
     }
     setBall();
@@ -620,7 +620,7 @@ function Neexxtt()
     const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
     const scoreKey = 'score' + (level_info - 1);
 
-    localStorage.setItem(scoreKey, score); /* 점수를 game.js로 전달 */
+    localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
     location.href = nextPage + values_str;
 }
 
