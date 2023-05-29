@@ -75,13 +75,14 @@ $(function(){
 
     //오디오 autoplay 기능이 안됨, 게임메뉴 전 화면을 생성해서 클릭이벤트 발생으로 bgm 실행
     $("#beforeStart").on("click", function() {  
-        bgmStart("bgm1");
+        bgmStart(selectedBgm);
         $(this).hide();
     })
 
     //level select 클릭시 레벨선택 팝업 띄움
     $("#level-select").on ("click", function() {
         close_allPopup();
+        $(".close-img").show(); 
 		$("#level-popup").addClass("popup");
 		change_position($(".popup"));
 		$("#level-popup").show();
@@ -106,8 +107,9 @@ $(function(){
     
     //팝업에서 x이미지는 클릭하면 팝업을 닫음
     $(".close-img").on ("click", function() {
-        $(this).parent().hide();
-		$(this).parent().removeClass("popup");
+        $(".close-img").hide();       ////////////
+        $(".popup").hide();             //////////
+		$(".popup").removeClass("popup");         /////////
 	})
     
     //설정에서 배경이미지를 선택하면 성택한 배경으로 변경
@@ -189,6 +191,7 @@ function openSettingPopup()
         return;
     }
     close_allPopup();
+    $(".close-img").show(); ///////////////////////
 	$("#setting-popup").addClass("popup");
 	change_position($(".popup"));
 	$("#setting-popup").show();
@@ -202,7 +205,9 @@ function close_allPopup() {
 function change_position(e) {
 	let l = ($("body").width() - e.width())/2;
 	let t = ($("body").height() - e.height())/2;
+
 	e.css({top:t, left:l});
+    $('.close-img').css({top:t + 1, right:l + 1});          /////////
 }
 
 

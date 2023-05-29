@@ -51,6 +51,7 @@ let gameMove; //requestAnimationFrame을 이 변수로 받아서 설정창이 �
 let gameOn_Off = false; //게임이 실행되면 true로 바뀜, 게임 시작 전 설정을 키고 닫으면 공이 움직이는 문제때문에 만듬
 let settingOn_Off = false;
 let levelUp_used = false;
+let values_str = "";
 
 const imgBricks = new Image();
 //imgBricks.onload = draw
@@ -380,13 +381,7 @@ function nextstage() {
 
         gameOn_Off = false;
        
-        let values_str="?";   
-        values_str = values_str + "level_info=" + level_info;
-        values_str = values_str + "&ballColor=" + ballColor;
-        values_str = values_str + "&blockColor=" + blockColor;
-        values_str = values_str + "&background_IMg=" + background_IMg;
-        values_str = values_str + "&selectedBgm=" + selectedBgm;
-        values_str = values_str + "&volume_value=" + volume_value;
+        make_values_str();
 
         const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
         const scoreKey = 'score' + (level_info - 1);
@@ -394,6 +389,17 @@ function nextstage() {
         localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
         location.href = nextPage + values_str;
     }
+}
+
+function make_values_str() 
+{
+    values_str="?";   
+    values_str = values_str + "level_info=" + level_info;
+    values_str = values_str + "&ballColor=" + ballColor;
+    values_str = values_str + "&blockColor=" + blockColor;
+    values_str = values_str + "&background_IMg=" + background_IMg;
+    values_str = values_str + "&selectedBgm=" + selectedBgm;
+    values_str = values_str + "&volume_value=" + volume_value;
 }
 
 function levelUp() {
@@ -524,7 +530,6 @@ document.addEventListener("mousemove", mouseMoveHandler, false);
 function mouseMoveHandler(e){
     let relativeX = e.clientX - ($(window).width() - canvas.width)/2;
     
-    console.log(relativeX);
 
     if(gameOn_Off == false || settingOn_Off == true)
     {
@@ -548,7 +553,8 @@ function init() {
         const scoreKey = 'score' + level_info;
         localStorage.setItem('life', life);
         localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
-        location.href = 'end.html';
+        make_values_str();
+        location.href = 'end.html' + values_str;
     }
     setBall();
     setPaddle();
@@ -579,24 +585,48 @@ function draw_object() { //게임을 시작하면 바로 실행되지 않고 오
 }
 draw_object();
 
+function mousedown_toMove(e) { //게임 시작후 정지화면에서 마우스 좌클릭을 하면 게임 실행
+    if(settingOn_Off == true)
+    {
+        return;
+    }
+
+    let relativeX = e.clientX - ($(window).width() - canvas.width)/2;
+
+    console.log(relativeX);
+
+    if(relativeX >=0 && relativeX <= 500)
+    {
+        game_start_move();
+    }
+
+}
+function keydown_toMove(e) { //게임 시작후 정지화면에서 좌우 방향키를 누르면 게임 실행
+    if(settingOn_Off == true)
+    {
+        return;
+    }
+    if (e.key == "Left" || e.key == "ArrowLeft") //게임 시작후 왼쪽키를 누르면 왼쪽으로 튕겨 나감
+    {
+        dx = -1 * 2;
+    }
+    if (e.key == "Right" || e.key == "ArrowRight" || e.key == "Left" || e.key == "ArrowLeft") {
+        game_start_move();
+    }
+}
+function game_start_move()
+{
+    $("#start-info").hide();
+    gameOn_Off = true;
+    draw();
+    bgmStart(selectedBgm);
+    document.removeEventListener('mousedown', mousedown_toMove); //한번 실행 후 이벤트리스너 삭제
+    document.removeEventListener('keydown', keydown_toMove); //한번 실행 후 이벤트리스너 삭제
+}
+
 function before_excution() {
-    document.addEventListener('keydown', function T(e) { //게임 시작후 정지화면에서 좌우 방향키를 누르면 게임 실행
-        if($("#setting-popup").attr("class") == "popup")
-        {
-            return;
-        }
-        if (e.key == "Left" || e.key == "ArrowLeft") //게임 시작후 왼쪽키를 누르면 왼쪽으로 튕겨 나감
-        {
-            dx = -1 * 2;
-        }
-        if (e.key == "Right" || e.key == "ArrowRight" || e.key == "Left" || e.key == "ArrowLeft") {
-            $("#start-info").hide();
-            gameOn_Off = true;
-            draw();
-            bgmStart(selectedBgm);
-            document.removeEventListener('keydown', T); //한번 실행 후 이벤트리스너 삭제
-        }
-    });
+    document.addEventListener('mousedown', mousedown_toMove);
+    document.addEventListener('keydown', keydown_toMove);
 };
 before_excution();
 
@@ -611,13 +641,7 @@ function Neexxtt()
     levelUp();
     gameOn_Off = false;
     
-    let values_str="?";   
-    values_str = values_str + "level_info=" + level_info;
-    values_str = values_str + "&ballColor=" + ballColor;
-    values_str = values_str + "&blockColor=" + blockColor;
-    values_str = values_str + "&background_IMg=" + background_IMg;
-    values_str = values_str + "&selectedBgm=" + selectedBgm;
-    values_str = values_str + "&volume_value=" + volume_value;
+    make_values_str();
 
     const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
     const scoreKey = 'score' + (level_info - 1);

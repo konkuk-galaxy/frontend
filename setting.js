@@ -98,10 +98,11 @@ $(function(){
         if(gameOn_Off == true)
         {
             requestAnimationFrame(draw);
-            settingOn_Off = false;
         }
-        $(this).parent().hide();
-		$(this).parent().removeClass("popup");
+        settingOn_Off = false;
+        $(".close-img").hide();
+        $(".popup").hide();
+		$(".popup").removeClass("popup");
 	})
     
     //설정에서 배경이미지를 선택하면 성택한 배경으로 변경
@@ -230,6 +231,7 @@ function openSettingPopup()
     //세팅창이 열려있지 않을경우
     cancelAnimationFrame(gameMove);
     settingOn_Off = true;
+    $(".close-img").show();
     close_allPopup();
 	$("#setting-popup").addClass("popup");
 	change_position($(".popup"));
@@ -245,6 +247,7 @@ function change_position(e) {
 	let l = ($("body").width() - e.width())/2;
 	let t = ($("body").height() - e.height())/2;
 	e.css({top:t, left:l});
+    $('.close-img').css({top:t + 1, right:l + 1});
 }
 
 
