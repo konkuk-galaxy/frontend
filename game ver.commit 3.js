@@ -53,6 +53,7 @@ let gameMove; //requestAnimationFrame을 이 변수로 받아서 설정창이 �
 let gameOn_Off = false; //게임이 실행되면 true로 바뀜, 게임 시작 전 설정을 키고 닫으면 공이 움직이는 문제때문에 만듬
 let settingOn_Off = false;
 let levelUp_used = false;
+let values_str = "";
 
 const imgBricks = new Image();
 //imgBricks.onload = draw
@@ -110,14 +111,16 @@ loadbrick(); //실행 해줘야 brickRowCount 값이 바뀜
 /* 점수 함수 */
 let score = 0;
 function callScore(jewel){
-    if(jewel === 0) // 평범한 자원 획득일 경우 1점 획득
+    if(jewel === 0) // 평범한 자원 획득일 경우 1점 획득-->미네랄
         score += 1;
-    else if(jewel === 1)
-        score += 2;
-    else if(jewel === 2)
-        score += 4;
-    else if(jewel === 3)
-        score += 9;
+    else if(jewel === 1)//가스
+        score += 3;
+    else if(jewel === 2)//사파이어
+        score += 5;
+    else if(jewel === 3)//루비
+        score += 7;
+    else if(jewel === 4)//다이아몬드
+        score += 10;
     
     console.log(jewel + "자원 획득 -> 점수 증가! " + score);
 }
@@ -343,7 +346,7 @@ function itemEffect() {
             ctx.drawImage(imgItem_diamond, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(3);
+            callScore(4);
         }
         if (jewelType === 2) {
             ctx.drawImage(imgItem_saphire, itemLogX, itemLogY, 24, 24);
@@ -404,13 +407,7 @@ function nextstage() {
 
         gameOn_Off = false;
        
-        let values_str="?";   
-        values_str = values_str + "level_info=" + level_info;
-        values_str = values_str + "&ballColor=" + ballColor;
-        values_str = values_str + "&blockColor=" + blockColor;
-        values_str = values_str + "&background_IMg=" + background_IMg;
-        values_str = values_str + "&selectedBgm=" + selectedBgm;
-        values_str = values_str + "&volume_value=" + volume_value;
+        make_values_str();
 
         const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
         const scoreKey = 'score' + (level_info - 1);
@@ -418,6 +415,17 @@ function nextstage() {
         localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
         location.href = nextPage + values_str;
     }
+}
+
+function make_values_str() 
+{
+    values_str="?";   
+    values_str = values_str + "level_info=" + level_info;
+    values_str = values_str + "&ballColor=" + ballColor;
+    values_str = values_str + "&blockColor=" + blockColor;
+    values_str = values_str + "&background_IMg=" + background_IMg;
+    values_str = values_str + "&selectedBgm=" + selectedBgm;
+    values_str = values_str + "&volume_value=" + volume_value;
 }
 
 function levelUp() {
@@ -571,7 +579,8 @@ function init() {
         const scoreKey = 'score' + level_info;
         localStorage.setItem('life', life);
         localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
-        location.href = 'end.html';
+        make_values_str();
+        location.href = 'end.html' + values_str;
     }
     setBall();
     setPaddle();
@@ -658,13 +667,7 @@ function Neexxtt()
     levelUp();
     gameOn_Off = false;
     
-    let values_str="?";   
-    values_str = values_str + "level_info=" + level_info;
-    values_str = values_str + "&ballColor=" + ballColor;
-    values_str = values_str + "&blockColor=" + blockColor;
-    values_str = values_str + "&background_IMg=" + background_IMg;
-    values_str = values_str + "&selectedBgm=" + selectedBgm;
-    values_str = values_str + "&volume_value=" + volume_value;
+    make_values_str();
 
     const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
     const scoreKey = 'score' + (level_info - 1);
