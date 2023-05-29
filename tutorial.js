@@ -15,12 +15,7 @@ $("#btn").click(function() {
         tmp.append(tmp2);
         $("#text").append(tmp);
         $(".btn2").click(function() {
-            if(difficulty == 1)
-            location.href="level1.html?level_info=1"
-            else if(difficulty == 2)
-            location.href="level2.html?level_info=2"
-            else
-            location.href="level3.html?level_info=3"
+            location.href = `level${difficulty}.html?level_info=${difficulty}`;
         });
         $("#btn").css("left","380px")
         $("#btn").text("필요합니다!")
