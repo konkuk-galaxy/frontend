@@ -18,7 +18,6 @@ let dy = -1 * 2;
 
 let paddleHeight = 10; //바 높이, 길이, 생성위치
 let paddleWidth = 120;
-
 let paddleX = (canvas.width - 100 - paddleWidth) / 2;
 let paddledx = 5;
 
@@ -54,7 +53,6 @@ let gameMove; //requestAnimationFrame을 이 변수로 받아서 설정창이 �
 let gameOn_Off = false; //게임이 실행되면 true로 바뀜, 게임 시작 전 설정을 키고 닫으면 공이 움직이는 문제때문에 만듬
 let settingOn_Off = false;
 let levelUp_used = false;
-let values_str = "";
 
 const imgBricks = new Image();
 //imgBricks.onload = draw
@@ -112,16 +110,14 @@ loadbrick(); //실행 해줘야 brickRowCount 값이 바뀜
 /* 점수 함수 */
 let score = 0;
 function callScore(jewel){
-    if(jewel === 0) // 평범한 자원 획득일 경우 1점 획득-->미네랄
+    if(jewel === 0) // 평범한 자원 획득일 경우 1점 획득
         score += 1;
-    else if(jewel === 1)//가스
-        score += 3;
-    else if(jewel === 2)//사파이어
-        score += 5;
-    else if(jewel === 3)//루비
-        score += 7;
-    else if(jewel === 4)//다이아몬드
-        score += 10;
+    else if(jewel === 1)
+        score += 2;
+    else if(jewel === 2)
+        score += 4;
+    else if(jewel === 3)
+        score += 9;
     
     console.log(jewel + "자원 획득 -> 점수 증가! " + score);
 }
@@ -168,12 +164,17 @@ function drawBricks() { //벽돌 좌표 지정 + 그리기
     }
 }
 
-function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히트박스와 이미지상의 차이를 매꾸지 않음
+function adjustSpeed() {
+    dx = dx > 0 ? dx - 0.5 : dx + 0.5;
+    dy = dy > 0 ? dy - 0.5 : dy + 0.5;
+}
+
+function collisionDetection() { //벽돌 충돌 감지 
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
             let b = bricks[c][r];
             if (b.status == 1) {
-                if ( //밑면 히트박스 제작
+                if ( //밑면 히트
                     x >= b.x &&
                     x <= b.x + brickWidth &&
                     ((y >= b.y && y <= b.y + 2) || //밑면 기준 안쪽으로 2만큼 판정구역 추가
@@ -182,13 +183,9 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
                     dy = -dy;
                     b.status = 0;
                     breakBrick++;
-                    // b.arrangeItem();
-                    // b.itemEffect();
-                    //아이템 발동 함수
-                    //callScore(); //점수 함수
                 }
 
-                if ( //옆면 히트박스 구현 옆면을 맞을때 그 왼쪽에 있는 애들이 싹다 지워짐
+                if ( //옆면 히트
                     y >= b.y &&
                     y <= b.y + brickHeight &&
                     ((x >= b.x && x <= b.x + 4) || //옆면 기준 안쪽으로 3만큼 판정구역 추가
@@ -197,30 +194,15 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
                     dx = -dx;
                     b.status = 0;
                     breakBrick++;
-                    // b.arrangeItem();
-                    // b.itemEffect();
-                    //아이템 발동 함수
-                    //callScore(); //점수 함수
                 }
 
-                if ( //블록 안쪽 히트박스 구현, 안쪽을 맞을 경우 속도가 너무 빠르단 것이므로 전체 굴절및 속도 감소
+                if ( // 안쪽 히트. 과속 방지를 위한 속도 조절
                 x >= b.x + 4 &&
                 x <= b.x + brickWidth -4 &&
                 y >= b.y + 2 &&
                 y <= b.y + brickHeight -2 
                 ) {
-                    if (dx > 0) {
-                        dx = dx - 0.5;
-                    }
-                    else {
-                        dx = dx + 0.5;
-                    }
-                    if (dy > 0) {
-                        dy = dy - 0.5;
-                    }
-                    else {
-                        dy = dy + 0.5;
-                    }
+                    adjustSpeed();
                     dx = -dx;
                     dy = -dy;
                     b.status = 0;
@@ -296,14 +278,11 @@ function itemEffect() {
         itemUse = 0;
 
     }
-    if (itemType === 3) { // 패들 크기 변화
+    if (itemType === 3) { // 패들 크기 변화, 패들을 왼쪽으로 늘림
         if (paddleitem < 3) {
             let recentPadWid = paddleWidth;
             paddleWidth = paddleWidth * 1.35;
             paddleX = paddleX - (paddleWidth - recentPadWid) ;
-            //패들을 왼쪽으로만 늘림
-            //오른쪽 아이템 창을 넘지 않음
-            //그래도 +paddledx 만큼 이미지가 생김
 
             ctx.drawImage(imgItem_paddlex2, itemLogX, itemLogY, 24, 24);
             itemCnt++;
@@ -347,7 +326,7 @@ function itemEffect() {
             ctx.drawImage(imgItem_diamond, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(4);
+            callScore(3);
         }
         if (jewelType === 2) {
             ctx.drawImage(imgItem_saphire, itemLogX, itemLogY, 24, 24);
@@ -408,7 +387,13 @@ function nextstage() {
 
         gameOn_Off = false;
        
-        make_values_str();
+        let values_str="?";   
+        values_str = values_str + "level_info=" + level_info;
+        values_str = values_str + "&ballColor=" + ballColor;
+        values_str = values_str + "&blockColor=" + blockColor;
+        values_str = values_str + "&background_IMg=" + background_IMg;
+        values_str = values_str + "&selectedBgm=" + selectedBgm;
+        values_str = values_str + "&volume_value=" + volume_value;
 
         const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
         const scoreKey = 'score' + (level_info - 1);
@@ -416,17 +401,6 @@ function nextstage() {
         localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
         location.href = nextPage + values_str;
     }
-}
-
-function make_values_str() 
-{
-    values_str="?";   
-    values_str = values_str + "level_info=" + level_info;
-    values_str = values_str + "&ballColor=" + ballColor;
-    values_str = values_str + "&blockColor=" + blockColor;
-    values_str = values_str + "&background_IMg=" + background_IMg;
-    values_str = values_str + "&selectedBgm=" + selectedBgm;
-    values_str = values_str + "&volume_value=" + volume_value;
 }
 
 function levelUp() {
@@ -500,18 +474,9 @@ function move() {
         if (x > paddleX && x < paddleX + paddleWidth) { //공이 바닥이지만, 바에 맞을 경우
             for (let i = 0; i < 7; i++) {
                 if (x > (paddleX + paddleWidth) * i / 7 && x < (paddleX + paddleWidth) * (i + 1) / 7) {
-                    //2가지 방식으로 개선
-                    //가속만 하면 후에 dx가 너무 빨라져 감속 추가
-
-                    //dx = dx + (0.05 * (3 - i))-0.05; 
-                    //변화 : +0.10 +0.05 0.00 -0.05 0.00 +0.05 +0.10
-
                     dx = dx + dx * Math.abs((0.05 * (3 - i)) - 0.05);
                     // 속도 * 1.10 1.05 1.00 0.95 1.00 1.05 1.10
                     break;
-
-
-                    // 이전 패치 : 1.15, 1.10, 1.05, 1.00, 1.05, 1.10, 1.15배 x증가폭 변경
                 }
             }
             dy = -dy;
@@ -580,8 +545,7 @@ function init() {
         const scoreKey = 'score' + level_info;
         localStorage.setItem('life', life);
         localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
-        make_values_str();
-        location.href = 'end.html' + values_str;
+        location.href = 'end.html';
     }
     setBall();
     setPaddle();
@@ -668,7 +632,13 @@ function Neexxtt()
     levelUp();
     gameOn_Off = false;
     
-    make_values_str();
+    let values_str="?";   
+    values_str = values_str + "level_info=" + level_info;
+    values_str = values_str + "&ballColor=" + ballColor;
+    values_str = values_str + "&blockColor=" + blockColor;
+    values_str = values_str + "&background_IMg=" + background_IMg;
+    values_str = values_str + "&selectedBgm=" + selectedBgm;
+    values_str = values_str + "&volume_value=" + volume_value;
 
     const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
     const scoreKey = 'score' + (level_info - 1);
