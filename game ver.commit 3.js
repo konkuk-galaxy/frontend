@@ -51,6 +51,7 @@ let gameMove; //requestAnimationFrame을 이 변수로 받아서 설정창이 �
 let gameOn_Off = false; //게임이 실행되면 true로 바뀜, 게임 시작 전 설정을 키고 닫으면 공이 움직이는 문제때문에 만듬
 let settingOn_Off = false;
 let levelUp_used = false;
+let values_str = "";
 
 const imgBricks = new Image();
 //imgBricks.onload = draw
@@ -378,13 +379,7 @@ function nextstage() {
 
         gameOn_Off = false;
        
-        let values_str="?";   
-        values_str = values_str + "level_info=" + level_info;
-        values_str = values_str + "&ballColor=" + ballColor;
-        values_str = values_str + "&blockColor=" + blockColor;
-        values_str = values_str + "&background_IMg=" + background_IMg;
-        values_str = values_str + "&selectedBgm=" + selectedBgm;
-        values_str = values_str + "&volume_value=" + volume_value;
+        make_values_str();
 
         const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
         const scoreKey = 'score' + (level_info - 1);
@@ -392,6 +387,17 @@ function nextstage() {
         localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
         location.href = nextPage + values_str;
     }
+}
+
+function make_values_str() 
+{
+    values_str="?";   
+    values_str = values_str + "level_info=" + level_info;
+    values_str = values_str + "&ballColor=" + ballColor;
+    values_str = values_str + "&blockColor=" + blockColor;
+    values_str = values_str + "&background_IMg=" + background_IMg;
+    values_str = values_str + "&selectedBgm=" + selectedBgm;
+    values_str = values_str + "&volume_value=" + volume_value;
 }
 
 function levelUp() {
@@ -545,7 +551,8 @@ function init() {
         const scoreKey = 'score' + level_info;
         localStorage.setItem('life', life);
         localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
-        location.href = 'end.html';
+        make_values_str();
+        location.href = 'end.html' + values_str;
     }
     setBall();
     setPaddle();
@@ -632,13 +639,7 @@ function Neexxtt()
     levelUp();
     gameOn_Off = false;
     
-    let values_str="?";   
-    values_str = values_str + "level_info=" + level_info;
-    values_str = values_str + "&ballColor=" + ballColor;
-    values_str = values_str + "&blockColor=" + blockColor;
-    values_str = values_str + "&background_IMg=" + background_IMg;
-    values_str = values_str + "&selectedBgm=" + selectedBgm;
-    values_str = values_str + "&volume_value=" + volume_value;
+    make_values_str();
 
     const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
     const scoreKey = 'score' + (level_info - 1);

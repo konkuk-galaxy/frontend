@@ -94,21 +94,21 @@ body {
 }
 #setting-popup {
   display: none;
-}
-#setting-menu {
-  width: 580px;
-  height: 430px;
   overflow-y: scroll;
 }
-#setting-menu::-webkit-scrollbar {
+#setting-menu {
+  width: 550px;
+  height: 430px;
+}
+#setting-popup::-webkit-scrollbar {
   width: 16px;
   
 }
-#setting-menu::-webkit-scrollbar-thumb {
+#setting-popup::-webkit-scrollbar-thumb {
   border-radius: 8px;
   background-color: rgba(26, 54, 194, 0.8);
 }
-#setting-menu::-webkit-scrollbar-track {
+#setting-popup::-webkit-scrollbar-track {
   border-radius: 8px;
   background-color: rgba(28, 29, 34, 0.8);
 }
