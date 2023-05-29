@@ -80,8 +80,8 @@ $(function(){
             requestAnimationFrame(draw);
             settingOn_Off = false;
         }
-        $(this).parent().hide();
-		$(this).parent().removeClass("popup");
+        $(this).parent().parent().hide();
+		$(this).parent().parent().removeClass("popup");
 	})
     
     //설정에서 배경이미지를 선택하면 성택한 배경으로 변경
