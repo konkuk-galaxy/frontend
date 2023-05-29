@@ -236,9 +236,7 @@ function getRandomInt(min, max) {
 function arrangeItem() {
     if (breakBrick > 0 && itemUse < 1) {
         randomValue = getRandomInt(1, 1000);
-        //itemType = Math.floor((randomValue - 1) / 100) + 1;
-            itemType= 2;
-        
+        itemType = Math.floor((randomValue - 1) / 100) + 1;
         itemUse++;
         breakBrick = 0;
     }
