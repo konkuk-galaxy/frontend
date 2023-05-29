@@ -17,7 +17,8 @@ let dx = 1 * 2;
 let dy = -1 * 2;
 
 let paddleHeight = 10; //바 높이, 길이, 생성위치
-let paddleWidth = 500;
+let paddleWidth = 120;
+
 let paddleX = (canvas.width - 100 - paddleWidth) / 2;
 let paddledx = 5;
 
