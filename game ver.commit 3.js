@@ -3,15 +3,20 @@
 //patch 2 : html body에 p 태그 #col,row에서 행렬 개수 가져옴, 블록을 다 깼을 시 다음 단계로 넘어, 3단계 까지 갔을경우 end로 이동
 
 //patch 3 : angle-item & game ver.commit2 통합, 벽돌 충돌 판정 부분을 넓힘(공 이동속도가 바뀌면서 블록을 통과하는 오류를 제거),  slow 이미지 달팽이 추가, paddle 맞을때 공이 역주행 하는 버그 패치, paddle 충돌 시 속도 처리방식 변경 
+let difficulty = localStorage.getItem('difficulty');
+
 let score = localStorage.getItem('score');
-let infostr = "esc키를 누르면 설정창이 열립니다. ";
 score = parseInt(score);
-let scorestr = infostr + score + "점";
+let level = localStorage.getItem('level');
+level = parseInt(level);
+let infostr = "esc키를 누르면 설정창이 열립니다. ";
+let tempstr =infostr + score + "점 : 스테이지" + level;
 $(function() {
-    $("#info-setting").text(scorestr);
+    $("#info-setting").text(tempstr);
 })
 
-let difficulty = localStorage.getItem('difficulty');
+
+
 
 
 let canvas = document.getElementById("myCanvas");
@@ -43,6 +48,7 @@ let brickOffsetLeft = 30;
 
 // 아이템 관련 변수
 let breakBrick = 0;
+let itemGroup = 0;
 let itemType = 0;
 let itemUse = 0;
 let randomValue = 0;
@@ -128,8 +134,8 @@ function callScore(jewel){
     else if(jewel === 4)
         score += 10;
 
-    scorestr = infostr + score + "점";
-    $("#info-setting").text(scorestr);
+    tempstr = infostr + score + "점 : 스테이지" + level;
+    $("#info-setting").text(tempstr);
 
     console.log(jewel + "자원 획득 -> 점수 증가! " + score);
     if(difficulty == 1 && score >= 50)
@@ -233,23 +239,41 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function arrangeItem() {
-    if (breakBrick > 0 && itemUse < 1) {
-        randomValue = getRandomInt(1, 1000);
-        itemType = Math.floor((randomValue - 1) / 100) + 1;
+function groupItem() {
+    if ((breakBrick > 0 && itemUse < 1) || (breakBrick > 3))
+    {
+        randomValue = getRandomInt(1, 100);
+        if(level >= 5)
+        {
+            if(randomValue <= (5 * 5 * difficulty))
+            itemGroup = 0;
+            else
+            {
+            itemGroup = 1;
+            itemType = getRandomInt(1,8);
+            console.log(itemType)
+            }
+            console.log("randomValue : " + randomValue + " 운석 조건 : " + (5 * 5 * difficulty) + " itemGroup : " + itemGroup + " itemType : " + itemType);
+        }
+        else
+        {
+            if(randomValue <= (5 * level * difficulty))
+            itemGroup = 0;
+            else
+            {
+            itemGroup = 1;
+            itemType = getRandomInt(1,8);
+            }
+            console.log("randomValue : " + randomValue + " 운석 조건 : " + (5 * level * difficulty) + " itemGroup : " + itemGroup + " itemType : " + itemType);
+        }
+
         itemUse++;
-        breakBrick = 0;
+        breakBrick =0;
     }
-    if (breakBrick > 3) {
-        randomValue = getRandomInt(1, 1000);
-        itemType = Math.floor((randomValue - 1) / 100) + 1;
-        itemUse++;
-        breakBrick = 0;
-    }
-} // 아이템 랜덤 배분 itemType 1~10까지, 깨질때마다 랜덤하게 배분 
+} // 난이도와 스테이지에 따라 아이템 그룹 배분 itemGroup 0:운석,1:나머지 
 
 function drawItem() { //
     if (itemLogY < 470 && itemLogX === 501) {
@@ -271,59 +295,8 @@ function itemEffect() {
         itemPosY = y;
     }
     itemPosY += 5;
-    if (itemType === 1) { // 목숨을 늘려주는 아이템
-        if(life < 4){
-            life++;  
-            ctx.drawImage(imgItem_heart, itemLogX, itemLogY, 24, 24);
-            itemCnt++;
-            drawItem(); 
-        } 
-        itemType = 0;
-        itemUse = 0;
-        itemPosY = 10000;
-        
-    }
-    if (itemType === 2) { // 공 속도 변화
-
-        dx = dx * 1.35;
-        dy = dy * 1.35;
-
-        ctx.drawImage(imgItem_speed, itemLogX, itemLogY, 24, 24);
-        itemCnt++;
-        drawItem();
-        itemType = 0;
-        itemUse = 0;
-
-    }
-    if (itemType === 3) { // 패들 크기 변화
-        if (paddleitem < 3) {
-            let recentPadWid = paddleWidth;
-            paddleWidth = paddleWidth * 1.35;
-            paddleX = paddleX - (paddleWidth - recentPadWid) ;
-            //패들을 왼쪽으로만 늘림
-            //오른쪽 아이템 창을 넘지 않음
-            //그래도 +paddledx 만큼 이미지가 생김
-
-            ctx.drawImage(imgItem_paddlex2, itemLogX, itemLogY, 24, 24);
-            itemCnt++;
-            drawItem();
-            itemType = 0;
-            itemUse = 0;
-            itemPosY = 0;
-        }   
-        itemType = 0;
-        itemUse = 0;
-    }
-    if (itemType === 4) { // 공 느리게
-        dy = dy / 1.35;
-        dx = dx / 1.35;
-        ctx.drawImage(imgItem_ball, itemLogX, itemLogY, 24, 24);
-        itemCnt++;
-        drawItem();
-        itemType = 0;
-        itemUse = 0;
-    }
-    if (itemType === 5) { // 유성
+    if(itemGroup === 0) // 유성
+    {
         ctx.drawImage(imgItem_meteor, itemPosX, itemPosY, 30, 50);
         if (itemPosX > paddleX && itemPosX < paddleX + paddleWidth && itemPosY > canvas.height - 20 && itemPosY < canvas.height) {
             life--;
@@ -339,46 +312,99 @@ function itemEffect() {
         }
         itemUse = 0;
     }
-    if (itemType === 6 || itemType === 7) { // 자원
-        randomValue2 = getRandomInt(1, 1000);
-        jewelType = Math.floor((randomValue2 - 1) / 200) + 1;
-        if (jewelType === 1) {
-            ctx.drawImage(imgItem_diamond, itemLogX, itemLogY, 24, 24);
-            itemCnt++;
-            drawItem();
-            callScore(4);
+    if(itemGroup === 1)
+    {
+        if (itemType === 1 || itemType === 2) { // 자원
+            randomValue2 = getRandomInt(1, 1000);
+            jewelType = Math.floor((randomValue2 - 1) / 200) + 1;
+            if (jewelType === 1) {
+                ctx.drawImage(imgItem_diamond, itemLogX, itemLogY, 24, 24);
+                itemCnt++;
+                drawItem();
+                callScore(4);
+            }
+            if (jewelType === 2) {
+                ctx.drawImage(imgItem_saphire, itemLogX, itemLogY, 24, 24);
+                itemCnt++;
+                drawItem();
+                callScore(3);
+            }
+            if (jewelType === 3) {
+                ctx.drawImage(imgItem_ruby, itemLogX, itemLogY, 24, 24);
+                itemCnt++;
+                drawItem();
+                callScore(2);
+            }
+            if (jewelType === 4) {
+                ctx.drawImage(imgItem_gas, itemLogX, itemLogY, 24, 24);
+                itemCnt++;
+                drawItem();
+                callScore(1);
+            }
+            if (jewelType === 5) {
+                ctx.drawImage(imgItem_mineral, itemLogX, itemLogY, 24, 24);
+                itemCnt++;
+                drawItem();
+                callScore(0);
+            }
+            itemType = 0;
+            itemUse = 0;
+            jewelType = 0;
         }
-        if (jewelType === 2) {
-            ctx.drawImage(imgItem_saphire, itemLogX, itemLogY, 24, 24);
-            itemCnt++;
-            drawItem();
-            callScore(3);
+        if (itemType === 3) { // 목숨을 늘려주는 아이템
+            if(life < 4){
+                life++;  
+                ctx.drawImage(imgItem_heart, itemLogX, itemLogY, 24, 24);
+                itemCnt++;
+                drawItem(); 
+            } 
+            itemType = 0;
+            itemUse = 0;
+            itemPosY = 10000;
         }
-        if (jewelType === 3) {
-            ctx.drawImage(imgItem_ruby, itemLogX, itemLogY, 24, 24);
-            itemCnt++;
-            drawItem();
-            callScore(2);
-        }
-        if (jewelType === 4) {
-            ctx.drawImage(imgItem_gas, itemLogX, itemLogY, 24, 24);
-            itemCnt++;
-            drawItem();
-            callScore(1);
-        }
-        if (jewelType === 5) {
-            ctx.drawImage(imgItem_mineral, itemLogX, itemLogY, 24, 24);
-            itemCnt++;
-            drawItem();
-            callScore(0);
-        }
+        if (itemType === 4) { // 공 속도 변화
+
+        dx = dx * 1.35;
+        dy = dy * 1.35;
+
+        ctx.drawImage(imgItem_speed, itemLogX, itemLogY, 24, 24);
+        itemCnt++;
+        drawItem();
         itemType = 0;
         itemUse = 0;
-        jewelType = 0;
-    }
-    if (itemType === 8 || itemType === 9 || itemType === 10) { // 꽝
-        itemType = 0;
-        itemUse = 0;
+        }
+        if (itemType === 5) { // 패들 크기 변화
+            if (paddleitem < 3) {
+                let recentPadWid = paddleWidth;
+                paddleWidth = paddleWidth * 1.35;
+                paddleX = paddleX - (paddleWidth - recentPadWid) ;
+                //패들을 왼쪽으로만 늘림
+                //오른쪽 아이템 창을 넘지 않음
+                //그래도 +paddledx 만큼 이미지가 생김
+
+                ctx.drawImage(imgItem_paddlex2, itemLogX, itemLogY, 24, 24);
+                itemCnt++;
+                drawItem();
+                itemType = 0;
+                itemUse = 0;
+                itemPosY = 0;
+            }   
+            itemType = 0;
+            itemUse = 0;
+        }
+        if (itemType === 6) { // 공 느리게
+            dy = dy / 1.35;
+            dx = dx / 1.35;
+            ctx.drawImage(imgItem_ball, itemLogX, itemLogY, 24, 24);
+            itemCnt++;
+            drawItem();
+            itemType = 0;
+            itemUse = 0;
+        }
+        if (itemType === 7 || itemType === 8) { // 꽝
+            itemType = 0;
+            itemUse = 0;
+        }
     }
     if (itemPosY > canvas.height) {
         itemPosX = 0;
@@ -386,6 +412,7 @@ function itemEffect() {
         itemType = 0;
     }
 }
+
 
 function nextstage() { 
     //다음 level 이동
@@ -404,17 +431,14 @@ function nextstage() {
         //주소에 레벨을 비롯한 색상, 배경등의 정보를 함께 넘겨 줘서 그 정보를 바탕으로 현제 레벨을 파악함.
         //다음스테이지로 넘어갈때 레벨, 색상, 배경, bgm정보등을 url 주소에 포함시켜 넘겨줘야함
         localStorage.setItem('score',score); //점수 전달
-
-        let values_str="?";   
-        values_str = values_str + "level_info=" + level_info;
-        values_str = values_str + "&ballColor=" + ballColor;
-        values_str = values_str + "&blockColor=" + blockColor;
-        values_str = values_str + "&background_IMg=" + background_IMg;
-        values_str = values_str + "&selectedBgm=" + selectedBgm;
-        values_str = values_str + "&volume_value=" + volume_value;
-
-        const nextPage = 'level' + level_info + '.html';
-        location.href = nextPage + values_str;
+        localStorage.setItem('ballColor',ballColor);
+        localStorage.setItem('blockColor',blockColor);
+        localStorage.setItem('background_IMg',background_IMg);
+        localStorage.setItem('selectedBgm',selectedBgm);
+        localStorage.setItem('volume_value',volume_value);
+        level = level + 1;
+        localStorage.setItem('level',level);
+        location.href = "level.html";
 
     }
 }
@@ -445,7 +469,7 @@ function draw() {
     move();
     drawHealthBar();
     collisionDetection();
-    arrangeItem();
+    groupItem();
     nextstage();
 
 
@@ -586,21 +610,21 @@ draw_object();
 
 function before_excution() {
     document.addEventListener('keydown', function T(e) { //게임 시작후 정지화면에서 좌우 방향키를 누르면 게임 실행
-        if($("#setting-popup").attr("class") == "popup")
-        {
-            return;
-        }
-        if (e.key == "Left" || e.key == "ArrowLeft") //게임 시작후 왼쪽키를 누르면 왼쪽으로 튕겨 나감
-        {
-            dx = -1 * 2;
-        }
-        if (e.key == "Right" || e.key == "ArrowRight" || e.key == "Left" || e.key == "ArrowLeft") {
-            $("#start-info").hide();
-            gameOn_Off = true;
-            draw();
-            bgmStart(selectedBgm);
-            document.removeEventListener('keydown', T); //한번 실행 후 이벤트리스너 삭제
-        }
+    if($("#setting-popup").attr("class") == "popup")
+    {
+        return;
+    }
+    if (e.key == "Left" || e.key == "ArrowLeft") //게임 시작후 왼쪽키를 누르면 왼쪽으로 튕겨 나감
+    {
+        dx = -1 * 2;
+    }
+    if (e.key == "Right" || e.key == "ArrowRight" || e.key == "Left" || e.key == "ArrowLeft") {
+        $("#start-info").hide();
+        gameOn_Off = true;
+        draw();
+        bgmStart(selectedBgm);
+        document.removeEventListener('keydown', T); //한번 실행 후 이벤트리스너 삭제
+    }
     });
 };
 before_excution();

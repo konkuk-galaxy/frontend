@@ -7,6 +7,11 @@ const color = [
     "gray", "aliceblue", "blueviolet", "brown", "navy"
 ];
 
+localStorage.setItem('volume_value',5);
+localStorage.setItem('ballColor',"aliceblue");
+localStorage.setItem('blockColor',"aliceblue");
+localStorage.setItem('background_IMg',backgroundUrl[0]);
+localStorage.setItem('selectedBgm',"bgm1");
 
 let ballColor = color[10];  //공 색상 정보 저장
 let blockColor = color[10];  //블럭 색상 정보 저장
@@ -19,34 +24,17 @@ let ballContext;   //설정에서의 공 예시창
 
 let volumeTmp = 5;  //볼륨정보 임시 저장
 
+if(localStorage.getItem('ballColor') != null)
+ballColor = localStorage.getItem('ballColor');
+if(localStorage.getItem('blockColor') != null)
+blockColor = localStorage.getItem('blockColor');
+if(localStorage.getItem('background_IMg') != null)
+background_IMg = localStorage.getItem('background_IMg');
+if(localStorage.getItem('selectedBgm') != null)
+selectedBgm = localStorage.getItem('selectedBgm');
+if(localStorage.getItem('volume_value') != null)
+volume_value = localStorage.getItem('volume_value');
 
-let url_values_arr = []; //url에서 넘겨받은 정보 저장
-let i = 0;
-
-const url = new URL(window.location.href);
-const urlParams = url.searchParams; 
-
-const values = urlParams.values();
-
-for(const val of values)  {
-    url_values_arr[i] = val;
-    console.log(url_values_arr[i]);
-    i++;
-    if(i == 6)
-        break;
-}
-if(url_values_arr[0] != null)
-{
-    level_info = url_values_arr[0];
-}
-if(url_values_arr[1] != null && url_values_arr[5] != null)
-{
-    ballColor = url_values_arr[1];
-    blockColor = url_values_arr[2];
-    background_IMg = url_values_arr[3];
-    selectedBgm = url_values_arr[4];
-    volume_value = url_values_arr[5];
-}
 
 $(function(){
     createBackgroundTable();  //설정에서 배경이미지 테이블 생성
@@ -57,15 +45,12 @@ $(function(){
 
     $("#easy > a").on("click",function() {
         localStorage.setItem('difficulty',1);
-        localStorage.setItem('score',0)
     })
     $("#normal > a").on("click",function() {
         localStorage.setItem('difficulty',2);
-        localStorage.setItem('score',0)
     })
     $("#hard > a").on("click",function() {
         localStorage.setItem('difficulty',3);
-        localStorage.setItem('score',0)
     })
     $("body").css("background-image",background_IMg);
     $("#beforeStart").css("background-image",background_IMg);
@@ -97,17 +82,15 @@ $(function(){
 		$("#level-popup").addClass("popup");
 		change_position($(".popup"));
 		$("#level-popup").show();
-
-        $(".mainToStage").each(function() {
-            let url_str = $(this).prop("id");
-            url_str = url_str + "&ballColor=" + ballColor;
-            url_str = url_str + "&blockColor=" + blockColor;
-            url_str = url_str + "&background_IMg=" + background_IMg;
-            url_str = url_str + "&selectedBgm=" + selectedBgm;
-            url_str = url_str + "&volume_value=" + volume_value;
-            $(this).prop("href", url_str);
-        })
     
+        localStorage.setItem('score',0);
+        localStorage.setItem('level',1);
+        localStorage.setItem('ballColor',ballColor);
+        localStorage.setItem('blockColor',blockColor);
+        localStorage.setItem('background_IMg',background_IMg);
+        localStorage.setItem('selectedBgm',selectedBgm);
+        localStorage.setItem('volume_value',volume_value);
+
 	})
 
     //설정 이미지 클릭시 설정팝업을 띄움
@@ -291,9 +274,3 @@ function initAllBgm() {
         all_bgm[i].pause();
     }
 }
-
-
-
-localStorage.setItem('score1',0);/*점수를 초기화*/
-localStorage.setItem('score2',0);
-localStorage.setItem('score3',0);
