@@ -3,6 +3,7 @@
 //patch 2 : html body에 p 태그 #col,row에서 행렬 개수 가져옴, 블록을 다 깼을 시 다음 단계로 넘어, 3단계 까지 갔을경우 end로 이동
 
 //patch 3 : angle-item & game ver.commit2 통합, 벽돌 충돌 판정 부분을 넓힘(공 이동속도가 바뀌면서 블록을 통과하는 오류를 제거),  slow 이미지 달팽이 추가, paddle 맞을때 공이 역주행 하는 버그 패치, paddle 충돌 시 속도 처리방식 변경 
+
 let difficulty = localStorage.getItem('difficulty');
 
 let score = localStorage.getItem('score');
@@ -16,10 +17,6 @@ $(function() {
     $("#info-setting").text(infostr);
     $("#stage-info").html(tempstr2);
 })
-
-
-
-
 
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
@@ -68,6 +65,7 @@ let gameMove; //requestAnimationFrame을 이 변수로 받아서 설정창이 �
 
 let gameOn_Off = false; //게임이 실행되면 true로 바뀜, 게임 시작 전 설정을 키고 닫으면 공이 움직이는 문제때문에 만듬
 let settingOn_Off = false;
+let levelUp_used = false;
 
 const imgBricks = new Image();
 //imgBricks.onload = draw
@@ -123,19 +121,18 @@ function loadbrick() {
 loadbrick(); //실행 해줘야 brickRowCount 값이 바뀜
 
 /* 점수 함수 */
-
 function callScore(jewel){
-    if(jewel === 0) // 평범한 자원 획득일 경우 1점 획득
+    if(jewel === 0) // 평범한 자원 획득일 경우 1점 획득-->미네랄
         score += 1;
-    else if(jewel === 1)
+    else if(jewel === 1)//가스
         score += 3;
-    else if(jewel === 2)
+    else if(jewel === 2)//사파이어
         score += 5;
-    else if(jewel === 3)
-        score += 7;    
-    else if(jewel === 4)
+    else if(jewel === 3)//루비
+        score += 7;
+    else if(jewel === 4)//다이아몬드
         score += 10;
-
+    
     let tempstr2 = stagestr + level + "<br>" + "점수 : " + score;
     $("#stage-info").html(tempstr2);
 
@@ -155,7 +152,6 @@ function callScore(jewel){
     localStorage.setItem('score', score); /* 점수를 end.js로 전달 */
     location.href = 'end.html';
     }
-
 }
 
 let bricks = []; //벽돌 생성
@@ -173,6 +169,7 @@ function drawBall() { //공 그리기
     ctx.fill();
     ctx.closePath();
 }
+
 
 function drawPaddle() { //바 그리기
     ctx.beginPath();
@@ -421,7 +418,6 @@ function itemEffect() {
     }
 }
 
-
 function nextstage() { 
     //다음 level 이동
     let flag = 1; //블록이 전부 깨졌을 때 1
@@ -435,7 +431,7 @@ function nextstage() {
             }
         }
     }
-    if (flag == 1) { //게임 재시작
+    if (flag == 1) { //현 페이지 기준으로 다음 스테이지 이동
         //주소에 레벨을 비롯한 색상, 배경등의 정보를 함께 넘겨 줘서 그 정보를 바탕으로 현제 레벨을 파악함.
         //다음스테이지로 넘어갈때 레벨, 색상, 배경, bgm정보등을 url 주소에 포함시켜 넘겨줘야함
         localStorage.setItem('score',score); //점수 전달
@@ -447,7 +443,6 @@ function nextstage() {
         level = level + 1;
         localStorage.setItem('level',level);
         location.href = "level.html";
-
     }
 }
 
@@ -562,7 +557,6 @@ document.addEventListener("mousemove", mouseMoveHandler, false);
 function mouseMoveHandler(e){
     let relativeX = e.clientX - ($(window).width() - canvas.width)/2;
     
-    console.log(relativeX);
 
     if(gameOn_Off == false || settingOn_Off == true)
     {
@@ -616,9 +610,24 @@ function draw_object() { //게임을 시작하면 바로 실행되지 않고 오
 }
 draw_object();
 
-function before_excution() {
-    document.addEventListener('keydown', function T(e) { //게임 시작후 정지화면에서 좌우 방향키를 누르면 게임 실행
-    if($("#setting-popup").attr("class") == "popup")
+function mousedown_toMove(e) { //게임 시작후 정지화면에서 마우스 좌클릭을 하면 게임 실행
+    if(settingOn_Off == true)
+    {
+        return;
+    }
+
+    let relativeX = e.clientX - ($(window).width() - canvas.width)/2;
+
+    console.log(relativeX);
+
+    if(relativeX >=0 && relativeX <= 500)
+    {
+        game_start_move();
+    }
+
+}
+function keydown_toMove(e) { //게임 시작후 정지화면에서 좌우 방향키를 누르면 게임 실행
+    if(settingOn_Off == true)
     {
         return;
     }
@@ -627,13 +636,22 @@ function before_excution() {
         dx = -1 * 2;
     }
     if (e.key == "Right" || e.key == "ArrowRight" || e.key == "Left" || e.key == "ArrowLeft") {
-        $("#start-info").hide();
-        gameOn_Off = true;
-        draw();
-        bgmStart(selectedBgm);
-        document.removeEventListener('keydown', T); //한번 실행 후 이벤트리스너 삭제
+        game_start_move();
     }
-    });
+}
+function game_start_move()
+{
+    $("#start-info").hide();
+    gameOn_Off = true;
+    draw();
+    bgmStart(selectedBgm);
+    document.removeEventListener('mousedown', mousedown_toMove); //한번 실행 후 이벤트리스너 삭제
+    document.removeEventListener('keydown', keydown_toMove); //한번 실행 후 이벤트리스너 삭제
+}
+
+function before_excution() {
+    document.addEventListener('mousedown', mousedown_toMove);
+    document.addEventListener('keydown', keydown_toMove);
 };
 before_excution();
 
@@ -641,6 +659,7 @@ ctx.beginPath();
 ctx.moveTo(500, 0);
 ctx.lineTo(500, 500);
 ctx.stroke();
+
 
 function drawSideBar(){
     ctx.fillStyle = "#070719";

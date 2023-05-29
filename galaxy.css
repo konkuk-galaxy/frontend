@@ -52,9 +52,6 @@ body {
 #level-select {
   font-weight:bold;
 }
-#info-setting {
-  font-weight:bold;
-}
 .mainToStage {
   font-weight: bold;
 }
@@ -148,10 +145,6 @@ body {
   cursor: pointer;
 }
 
-#setting-img {
-  cursor: pointer;
-}
-
 .popup {
   margin: auto;
   overflow: hidden;
@@ -207,6 +200,7 @@ body {
   padding: 5px;
   color: rgb(198, 219, 127);
   font-size: 18px;
+  font-weight:bold;
   position: absolute;
   bottom: 0;
 
