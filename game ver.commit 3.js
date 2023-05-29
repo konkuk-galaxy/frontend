@@ -4,6 +4,8 @@
 
 //patch 3 : angle-item & game ver.commit2 통합, 벽돌 충돌 판정 부분을 넓힘(공 이동속도가 바뀌면서 블록을 통과하는 오류를 제거),  slow 이미지 달팽이 추가, paddle 맞을때 공이 역주행 하는 버그 패치, paddle 충돌 시 속도 처리방식 변경 
 
+//patch 4 : 안쪽 판정 구현, 과속 방지 
+
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 
@@ -15,7 +17,7 @@ let dx = 1 * 2;
 let dy = -1 * 2;
 
 let paddleHeight = 10; //바 높이, 길이, 생성위치
-let paddleWidth = 120;
+let paddleWidth = 500;
 let paddleX = (canvas.width - 100 - paddleWidth) / 2;
 let paddledx = 5;
 
@@ -51,7 +53,6 @@ let gameMove; //requestAnimationFrame을 이 변수로 받아서 설정창이 �
 let gameOn_Off = false; //게임이 실행되면 true로 바뀜, 게임 시작 전 설정을 키고 닫으면 공이 움직이는 문제때문에 만듬
 let settingOn_Off = false;
 let levelUp_used = false;
-let values_str = "";
 
 const imgBricks = new Image();
 //imgBricks.onload = draw
@@ -186,8 +187,8 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
                 if ( //옆면 히트박스 구현 옆면을 맞을때 그 왼쪽에 있는 애들이 싹다 지워짐
                     y >= b.y &&
                     y <= b.y + brickHeight &&
-                    ((x >= b.x && x <= b.x + 2) || //옆면 기준 안쪽으로 3만큼 판정구역 추가
-                        (x <= b.x + brickWidth && x >= b.x + brickWidth - 2))
+                    ((x >= b.x && x <= b.x + 4) || //옆면 기준 안쪽으로 3만큼 판정구역 추가
+                        (x <= b.x + brickWidth && x >= b.x + brickWidth - 4))
                 ) {
                     dx = -dx;
                     b.status = 0;
@@ -196,6 +197,30 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
                     // b.itemEffect();
                     //아이템 발동 함수
                     //callScore(); //점수 함수
+                }
+
+                if ( //블록 안쪽 히트박스 구현, 안쪽을 맞을 경우 속도가 너무 빠르단 것이므로 전체 굴절및 속도 감소
+                x >= b.x + 4 &&
+                x <= b.x + brickWidth -4 &&
+                y >= b.y + 2 &&
+                y <= b.y + brickHeight -2 
+                ) {
+                    if (dx > 0) {
+                        dx = dx - 0.5;
+                    }
+                    else {
+                        dx = dx + 0.5;
+                    }
+                    if (dy > 0) {
+                        dy = dy - 0.5;
+                    }
+                    else {
+                        dy = dy + 0.5;
+                    }
+                    dx = -dx;
+                    dy = -dy;
+                    b.status = 0;
+                    breakBrick++;
                 }
             }
         }
@@ -379,7 +404,13 @@ function nextstage() {
 
         gameOn_Off = false;
        
-        make_values_str();
+        let values_str="?";   
+        values_str = values_str + "level_info=" + level_info;
+        values_str = values_str + "&ballColor=" + ballColor;
+        values_str = values_str + "&blockColor=" + blockColor;
+        values_str = values_str + "&background_IMg=" + background_IMg;
+        values_str = values_str + "&selectedBgm=" + selectedBgm;
+        values_str = values_str + "&volume_value=" + volume_value;
 
         const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
         const scoreKey = 'score' + (level_info - 1);
@@ -387,17 +418,6 @@ function nextstage() {
         localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
         location.href = nextPage + values_str;
     }
-}
-
-function make_values_str() 
-{
-    values_str="?";   
-    values_str = values_str + "level_info=" + level_info;
-    values_str = values_str + "&ballColor=" + ballColor;
-    values_str = values_str + "&blockColor=" + blockColor;
-    values_str = values_str + "&background_IMg=" + background_IMg;
-    values_str = values_str + "&selectedBgm=" + selectedBgm;
-    values_str = values_str + "&volume_value=" + volume_value;
 }
 
 function levelUp() {
@@ -551,8 +571,7 @@ function init() {
         const scoreKey = 'score' + level_info;
         localStorage.setItem('life', life);
         localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
-        make_values_str();
-        location.href = 'end.html' + values_str;
+        location.href = 'end.html';
     }
     setBall();
     setPaddle();
@@ -639,7 +658,13 @@ function Neexxtt()
     levelUp();
     gameOn_Off = false;
     
-    make_values_str();
+    let values_str="?";   
+    values_str = values_str + "level_info=" + level_info;
+    values_str = values_str + "&ballColor=" + ballColor;
+    values_str = values_str + "&blockColor=" + blockColor;
+    values_str = values_str + "&background_IMg=" + background_IMg;
+    values_str = values_str + "&selectedBgm=" + selectedBgm;
+    values_str = values_str + "&volume_value=" + volume_value;
 
     const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
     const scoreKey = 'score' + (level_info - 1);
