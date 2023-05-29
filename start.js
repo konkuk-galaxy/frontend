@@ -57,12 +57,15 @@ $(function(){
 
     $("#easy > a").on("click",function() {
         localStorage.setItem('difficulty',1);
+        localStorage.setItem('score',0)
     })
     $("#normal > a").on("click",function() {
         localStorage.setItem('difficulty',2);
+        localStorage.setItem('score',0)
     })
     $("#hard > a").on("click",function() {
         localStorage.setItem('difficulty',3);
+        localStorage.setItem('score',0)
     })
     $("body").css("background-image",background_IMg);
     $("#beforeStart").css("background-image",background_IMg);

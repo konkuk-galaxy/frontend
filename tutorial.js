@@ -16,11 +16,11 @@ $("#btn").click(function() {
         $("#text").append(tmp);
         $(".btn2").click(function() {
             if(difficulty == 1)
-            location.href="level1.html"
+            location.href="level1.html?level_info=1"
             else if(difficulty == 2)
-            location.href="level2.html"
+            location.href="level2.html?level_info=2"
             else
-            location.href="level3.html"
+            location.href="level3.html?level_info=3"
         });
         $("#btn").css("left","380px")
         $("#btn").text("필요합니다!")
@@ -55,22 +55,22 @@ $("#btn").click(function() {
         $("img").attr("src", "tutorial/960x540image6.png");
 
         if(difficulty == 1)
-            $("#textp").html("<br>목표는 자원수집이네. 20점을 넘기게! 점수는 자원 획득으로 얻을 수 있고 각 자원별로 점수가 다르다는 것을 참고하게!<br>")
+            $("#textp").html("<br>목표는 자원수집이네. 50점을 넘기게! 점수는 자원 획득으로 얻을 수 있고 각 자원별로 점수가 다르다는 것을 참고하게!<br>")
         else if(difficulty == 2)
-        $("#textp").html("<br>목표는 자원수집이네. 50점을 넘기게! 점수는 자원 획득으로 얻을 수 있고 각 자원별로 점수가 다르다는 것을 참고하게!<br>")
-        else
         $("#textp").html("<br>목표는 자원수집이네. 100점을 넘기게! 점수는 자원 획득으로 얻을 수 있고 각 자원별로 점수가 다르다는 것을 참고하게!<br>")
+        else
+        $("#textp").html("<br>목표는 자원수집이네. 200점을 넘기게! 점수는 자원 획득으로 얻을 수 있고 각 자원별로 점수가 다르다는 것을 참고하게!<br>")
            
         $("#buttonp").html("알겠습니다!")
     }
     else
     {
         if(difficulty == 1)
-        location.href="level1.html"
+        location.href="level1.html?level_info=1"
         else if(difficulty == 2)
-        location.href="level2.html"
+        location.href="level2.html?level_info=2"
         else
-        location.href="level3.html"
+        location.href="level3.html?level_info=3"
     }
 index = index + 1
 });

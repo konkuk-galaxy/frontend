@@ -3,6 +3,16 @@
 //patch 2 : html body에 p 태그 #col,row에서 행렬 개수 가져옴, 블록을 다 깼을 시 다음 단계로 넘어, 3단계 까지 갔을경우 end로 이동
 
 //patch 3 : angle-item & game ver.commit2 통합, 벽돌 충돌 판정 부분을 넓힘(공 이동속도가 바뀌면서 블록을 통과하는 오류를 제거),  slow 이미지 달팽이 추가, paddle 맞을때 공이 역주행 하는 버그 패치, paddle 충돌 시 속도 처리방식 변경 
+let score = localStorage.getItem('score');
+let infostr = "esc키를 누르면 설정창이 열립니다. ";
+score = parseInt(score);
+let scorestr = infostr + score + "점";
+$(function() {
+    $("#info-setting").text(scorestr);
+})
+
+let difficulty = localStorage.getItem('difficulty');
+
 
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
@@ -50,7 +60,6 @@ let gameMove; //requestAnimationFrame을 이 변수로 받아서 설정창이 �
 
 let gameOn_Off = false; //게임이 실행되면 true로 바뀜, 게임 시작 전 설정을 키고 닫으면 공이 움직이는 문제때문에 만듬
 let settingOn_Off = false;
-let levelUp_used = false;
 
 const imgBricks = new Image();
 //imgBricks.onload = draw
@@ -106,18 +115,39 @@ function loadbrick() {
 loadbrick(); //실행 해줘야 brickRowCount 값이 바뀜
 
 /* 점수 함수 */
-let score = 0;
+
 function callScore(jewel){
     if(jewel === 0) // 평범한 자원 획득일 경우 1점 획득
         score += 1;
     else if(jewel === 1)
-        score += 2;
+        score += 3;
     else if(jewel === 2)
-        score += 4;
+        score += 5;
     else if(jewel === 3)
-        score += 9;
-    
+        score += 7;    
+    else if(jewel === 4)
+        score += 10;
+
+    scorestr = infostr + score + "점";
+    $("#info-setting").text(scorestr);
+
     console.log(jewel + "자원 획득 -> 점수 증가! " + score);
+    if(difficulty == 1 && score >= 50)
+    {
+    localStorage.setItem('score', score); /* 점수를 end.js로 전달 */
+    location.href = 'end.html';
+    }
+    if(difficulty == 2 && score >= 100)
+    {
+    localStorage.setItem('score', score); /* 점수를 end.js로 전달 */
+    location.href = 'end.html';
+    }
+    if(difficulty == 3 && score >= 200)
+    {
+    localStorage.setItem('score', score); /* 점수를 end.js로 전달 */
+    location.href = 'end.html';
+    }
+
 }
 
 let bricks = []; //벽돌 생성
@@ -135,7 +165,6 @@ function drawBall() { //공 그리기
     ctx.fill();
     ctx.closePath();
 }
-
 
 function drawPaddle() { //바 그리기
     ctx.beginPath();
@@ -317,7 +346,7 @@ function itemEffect() {
             ctx.drawImage(imgItem_diamond, itemLogX, itemLogY, 24, 24);
             itemCnt++;
             drawItem();
-            callScore(3);
+            callScore(4);
         }
         if (jewelType === 2) {
             ctx.drawImage(imgItem_saphire, itemLogX, itemLogY, 24, 24);
@@ -371,13 +400,11 @@ function nextstage() {
             }
         }
     }
-    if (flag == 1) { //현 페이지 기준으로 다음 스테이지 이동
+    if (flag == 1) { //게임 재시작
         //주소에 레벨을 비롯한 색상, 배경등의 정보를 함께 넘겨 줘서 그 정보를 바탕으로 현제 레벨을 파악함.
         //다음스테이지로 넘어갈때 레벨, 색상, 배경, bgm정보등을 url 주소에 포함시켜 넘겨줘야함
-        levelUp();
+        localStorage.setItem('score',score); //점수 전달
 
-        gameOn_Off = false;
-       
         let values_str="?";   
         values_str = values_str + "level_info=" + level_info;
         values_str = values_str + "&ballColor=" + ballColor;
@@ -386,30 +413,11 @@ function nextstage() {
         values_str = values_str + "&selectedBgm=" + selectedBgm;
         values_str = values_str + "&volume_value=" + volume_value;
 
-        const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
-        const scoreKey = 'score' + (level_info - 1);
-    
-        localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
+        const nextPage = 'level' + level_info + '.html';
         location.href = nextPage + values_str;
+
     }
 }
-
-function levelUp() {
-    if(levelUp_used == true) //만약 nextstage()가 계속해서 반복 호출되는 버그가 또 발생할 시  levelUp()함수가 여러번 호출되어 end.html로 이동하는 문제 원천 봉쇄
-    {
-        return;
-    }
-
-    if (level_info == 1) {
-        level_info = 2;
-    } else if (level_info == 2) {
-        level_info = 3;
-    } else if (level_info == 3) {
-        level_info = 4;
-    }
-    levelUp_used = true;
-}
-
 
 function drawHealthBar() {
      
@@ -543,9 +551,8 @@ document.onmousemove = function(e){
 function init() {
     //바닥 맞았을 경우 game over 판정 및 위치 초기화 함수
     if (life == 0) {
-        const scoreKey = 'score' + level_info;
         localStorage.setItem('life', life);
-        localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
+        localStorage.setItem('score', score); /* 점수를 end.js로 전달 */
         location.href = 'end.html';
     }
     setBall();
@@ -602,27 +609,6 @@ ctx.beginPath();
 ctx.moveTo(500, 0);
 ctx.lineTo(500, 500);
 ctx.stroke();
-
-
-function Neexxtt() 
-{
-    levelUp();
-    gameOn_Off = false;
-    
-    let values_str="?";   
-    values_str = values_str + "level_info=" + level_info;
-    values_str = values_str + "&ballColor=" + ballColor;
-    values_str = values_str + "&blockColor=" + blockColor;
-    values_str = values_str + "&background_IMg=" + background_IMg;
-    values_str = values_str + "&selectedBgm=" + selectedBgm;
-    values_str = values_str + "&volume_value=" + volume_value;
-
-    const nextPage = level_info > 3 ? 'end.html' : 'level' + level_info + '.html';
-    const scoreKey = 'score' + (level_info - 1);
-
-    localStorage.setItem(scoreKey, score); /* 점수를 end.js로 전달 */
-    location.href = nextPage + values_str;
-}
 
 function drawSideBar(){
     ctx.fillStyle = "#070719";
