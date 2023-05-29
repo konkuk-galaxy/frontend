@@ -522,7 +522,6 @@ document.addEventListener("mousemove", mouseMoveHandler, false);
 function mouseMoveHandler(e){
     let relativeX = e.clientX - ($(window).width() - canvas.width)/2;
     
-    console.log(relativeX);
 
     if(gameOn_Off == false || settingOn_Off == true)
     {
@@ -577,24 +576,48 @@ function draw_object() { //게임을 시작하면 바로 실행되지 않고 오
 }
 draw_object();
 
+function mousedown_toMove(e) { //게임 시작후 정지화면에서 마우스 좌클릭을 하면 게임 실행
+    if(settingOn_Off == true)
+    {
+        return;
+    }
+
+    let relativeX = e.clientX - ($(window).width() - canvas.width)/2;
+
+    console.log(relativeX);
+
+    if(relativeX >=0 && relativeX <= 500)
+    {
+        game_start_move();
+    }
+
+}
+function keydown_toMove(e) { //게임 시작후 정지화면에서 좌우 방향키를 누르면 게임 실행
+    if(settingOn_Off == true)
+    {
+        return;
+    }
+    if (e.key == "Left" || e.key == "ArrowLeft") //게임 시작후 왼쪽키를 누르면 왼쪽으로 튕겨 나감
+    {
+        dx = -1 * 2;
+    }
+    if (e.key == "Right" || e.key == "ArrowRight" || e.key == "Left" || e.key == "ArrowLeft") {
+        game_start_move();
+    }
+}
+function game_start_move()
+{
+    $("#start-info").hide();
+    gameOn_Off = true;
+    draw();
+    bgmStart(selectedBgm);
+    document.removeEventListener('mousedown', mousedown_toMove); //한번 실행 후 이벤트리스너 삭제
+    document.removeEventListener('keydown', keydown_toMove); //한번 실행 후 이벤트리스너 삭제
+}
+
 function before_excution() {
-    document.addEventListener('keydown', function T(e) { //게임 시작후 정지화면에서 좌우 방향키를 누르면 게임 실행
-        if($("#setting-popup").attr("class") == "popup")
-        {
-            return;
-        }
-        if (e.key == "Left" || e.key == "ArrowLeft") //게임 시작후 왼쪽키를 누르면 왼쪽으로 튕겨 나감
-        {
-            dx = -1 * 2;
-        }
-        if (e.key == "Right" || e.key == "ArrowRight" || e.key == "Left" || e.key == "ArrowLeft") {
-            $("#start-info").hide();
-            gameOn_Off = true;
-            draw();
-            bgmStart(selectedBgm);
-            document.removeEventListener('keydown', T); //한번 실행 후 이벤트리스너 삭제
-        }
-    });
+    document.addEventListener('mousedown', mousedown_toMove);
+    document.addEventListener('keydown', keydown_toMove);
 };
 before_excution();
 
