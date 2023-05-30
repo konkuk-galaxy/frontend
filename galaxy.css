@@ -31,6 +31,7 @@ body {
   top: 0;
   right: 0;
   font-size: 24px;
+  font-weight:bold;
   color: rgb(198, 219, 127);
   background-color: black;
   z-index: 1;
@@ -48,10 +49,29 @@ body {
   background-color: rgba(240, 248, 255, 0.5);
   z-index: 1;
 }
+#level-select {
+  font-weight:bold;
+}
+.mainToStage {
+  font-weight: bold;
+}
+#stage-info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color:#A1BBA2;
+  font-size:24px;
+  font-weight:bold;
+}
 #setting-img {
   position: absolute;
   top: 0;
   right: 0;
+  cursor:pointer;
+}
+#setting-upper {
+  width:580px;
+  height:54px;
 }
 .main-menu {
   /**margin: 60px auto;**/
@@ -94,21 +114,21 @@ body {
 }
 #setting-popup {
   display: none;
-  overflow-y: scroll;
 }
 #setting-menu {
-  width: 550px;
+  width: 580px;
   height: 430px;
+  overflow-y: scroll;
 }
-#setting-popup::-webkit-scrollbar {
+#setting-menu::-webkit-scrollbar {
   width: 16px;
   
 }
-#setting-popup::-webkit-scrollbar-thumb {
+#setting-menu::-webkit-scrollbar-thumb {
   border-radius: 8px;
   background-color: rgba(26, 54, 194, 0.8);
 }
-#setting-popup::-webkit-scrollbar-track {
+#setting-menu::-webkit-scrollbar-track {
   border-radius: 8px;
   background-color: rgba(28, 29, 34, 0.8);
 }
@@ -121,17 +141,7 @@ body {
 }
 
 .close-img {
-  width: 50px;
-  height: 50px;
-  z-index: 2;
-  display: none;
-  position: absolute;
-  cursor: pointer;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-#setting-img {
+  float: right;
   cursor: pointer;
 }
 
@@ -190,6 +200,7 @@ body {
   padding: 5px;
   color: rgb(198, 219, 127);
   font-size: 18px;
+  font-weight:bold;
   position: absolute;
   bottom: 0;
 
