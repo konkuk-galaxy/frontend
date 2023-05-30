@@ -180,6 +180,8 @@ $(function(){
         localStorage.setItem('background_IMg',background_IMg);
         localStorage.setItem('selectedBgm',selectedBgm);
         localStorage.setItem('volume_value',volume_value);
+
+        location.href = 'main.html';
     })
 
 })
