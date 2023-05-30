@@ -196,6 +196,11 @@ function drawBricks() { //벽돌 좌표 지정 + 그리기
     }
 }
 
+function adjustSpeed() {
+    dx = dx > 0 ? dx - 0.5 : dx + 0.5;
+    dy = dy > 0 ? dy - 0.5 : dy + 0.5;
+}
+
 function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히트박스와 이미지상의 차이를 매꾸지 않음
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
@@ -229,6 +234,18 @@ function collisionDetection() { //벽돌 충돌 감지 , 가끔 튕기는건 히
                     // b.itemEffect();
                     //아이템 발동 함수
                     //callScore(); //점수 함수
+                }
+                if ( // 안쪽 히트. 과속 방지를 위한 속도 조절
+                    x >= b.x + 4 &&
+                    x <= b.x + brickWidth -4 &&
+                    y >= b.y + 2 &&
+                    y <= b.y + brickHeight -2 
+                ) {
+                    adjustSpeed();
+                    dx = -dx;
+                    dy = -dy;
+                    b.status = 0;
+                    breakBrick++;
                 }
             }
         }
@@ -500,18 +517,10 @@ function move() {
         if (x > paddleX && x < paddleX + paddleWidth) { //공이 바닥이지만, 바에 맞을 경우
             for (let i = 0; i < 7; i++) {
                 if (x > (paddleX + paddleWidth) * i / 7 && x < (paddleX + paddleWidth) * (i + 1) / 7) {
-                    //2가지 방식으로 개선
-                    //가속만 하면 후에 dx가 너무 빨라져 감속 추가
-
-                    //dx = dx + (0.05 * (3 - i))-0.05; 
-                    //변화 : +0.10 +0.05 0.00 -0.05 0.00 +0.05 +0.10
 
                     dx = dx + dx * Math.abs((0.05 * (3 - i)) - 0.05);
                     // 속도 * 1.10 1.05 1.00 0.95 1.00 1.05 1.10
                     break;
-
-
-                    // 이전 패치 : 1.15, 1.10, 1.05, 1.00, 1.05, 1.10, 1.15배 x증가폭 변경
                 }
             }
             dy = -dy;
