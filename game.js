@@ -4,6 +4,7 @@ let score = localStorage.getItem('score');
 score = parseInt(score);
 let level = localStorage.getItem('level');
 level = parseInt(level);
+let levelFlag = false;
 let infostr = "esc키를 누르면 설정창이 열립니다. ";
 let stagestr = "스테이지 : "
 let tempstr2 = stagestr + level + "<br>" + "점수 : " + score;
@@ -451,7 +452,10 @@ function nextstage() {
         localStorage.setItem('background_IMg',background_IMg);
         localStorage.setItem('selectedBgm',selectedBgm);
         localStorage.setItem('volume_value',volume_value);
-        level = level + 1;
+        if(!levelFlag){
+            level = level + 1;
+        }
+        levelFlag = true;
         localStorage.setItem('level',level);
         location.href = "level.html";
     }
